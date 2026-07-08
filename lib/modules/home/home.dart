@@ -15,9 +15,7 @@ class HomeSell extends StatelessWidget {
       body: Stack(
         children: [
           // Positioned.fill(child: child),
-          Positioned(top: 0, left: 0, right: 0,
-          bottom: 0,
-           child: child),
+          Positioned(top: 0, left: 0, right: 0, bottom: 0, child: child),
           Positioned.fill(
             bottom: 0,
             left: 0,
@@ -35,25 +33,25 @@ class HomeSell extends StatelessWidget {
                   title: 'title',
                   path: U.Icons.chat,
                   onTap: () {
-                    GoRouter.of(context).pushNamed(Chat.route);
+                    GoRouter.of(context).pushNamed(ChatPge.route);
                   },
                 ),
                 U.NavBarItem(
                   isPrimary: false,
                   title: 'title',
-                  path: U.Icons.back,
+                  path: U.Icons.create,
                   onTap: () {},
                 ),
                 U.NavBarItem(
                   isPrimary: false,
-                  title: 'title',
-                  path: U.Icons.menu,
+                  title: 'tasks',
+                  path: U.Icons.progression,
                   onTap: () {},
                 ),
                 U.NavBarItem(
                   isPrimary: false,
-                  title: 'title',
-                  path: U.Icons.menu,
+                  title: 'journey',
+                  path: U.Icons.journey,
                   onTap: () {},
                 ),
               ],

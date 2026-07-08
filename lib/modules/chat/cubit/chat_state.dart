@@ -1,6 +1,13 @@
 part of 'chat_cubit.dart';
 
-@immutable
-sealed class ChatState {}
+class ChatState {
+  final bool loading;
 
-final class ChatInitial extends ChatState {}
+  ChatState({required this.loading});
+
+  ChatState.init() : loading = false;
+
+  ChatState copyWith({bool? loading}) {
+    return ChatState(loading: loading ?? this.loading);
+  }
+}

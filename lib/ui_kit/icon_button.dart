@@ -12,20 +12,23 @@ class IconButton extends StatelessWidget {
     required this.icon,
     required this.onTapped,
     required this.size,
-    this.color ,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: BoxBorder.all(width: 1, color: U.Theme.secondaryButton),
-        borderRadius: BorderRadius.circular(50),
-        color: color ?? Colors.white.withValues(alpha: 1.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 19.0,vertical: 9),
-        child: U.Image.icon(path: icon, size: size),
+    return GestureDetector(
+      onTap: onTapped,
+      child: Container(
+        decoration: BoxDecoration(
+          // border: BoxBorder.all(width: 1, color: U.Theme.secondaryButton),
+          borderRadius: BorderRadius.circular(50),
+          color: color ?? Colors.white.withValues(alpha: 1.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 9),
+          child: U.Image.icon(path: icon, size: size),
+        ),
       ),
     );
   }

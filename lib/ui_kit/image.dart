@@ -38,6 +38,9 @@ class Icons {
   static const String microphone = 'assets/icons/microphone.png';
   static const String wrong = 'assets/icons/wrong.png';
   static const String back = 'assets/icons/back.png';
+  static const String create = 'assets/icons/create.png';
+  static const String progression = 'assets/icons/progression.png';
+  static const String journey = 'assets/icons/journey.png';
 }
 
 class Images {

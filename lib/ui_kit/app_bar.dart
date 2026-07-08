@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class AppBar extends StatelessWidget {
@@ -17,10 +18,12 @@ class AppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                GoRouter.of(context).pop();
+              },
               child: U.Image(path: U.Icons.back, width: 28, height: 14),
             ),
-            U.Text(text: title),
+            U.Text(text: title,textSize: U.TextSize.s18,textWeight: U.TextWeight.bold,),
             InkWell(
               onTap: () {},
               child: U.Image.icon(path: U.Icons.wrong, size: 14),

@@ -8,12 +8,14 @@ class GoalTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        border: Border.all(width: 1, color: U.Theme.secondaryButton),
+
         borderRadius: BorderRadius.circular(20),
-        color: U.Theme.background.withValues(alpha: 0.7),
+        color: U.Theme.background.withValues(alpha: 0.9),
       ),
       height: 272,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Stack(
           children: [
             TextField(
@@ -34,7 +36,8 @@ class GoalTextfield extends StatelessWidget {
                 color: U.Theme.background,
                 child: Row(
                   children: [
-                    U.IconButton(icon: U.Icons.wrong, onTapped: () {}, size: 22),
+                    // U.IconButton(icon: U.Icons.wrong, onTapped: () {}, size: 22),
+                    U.OutlineIconButton(onTap: () {}, path: U.Icons.wrong,),
                     Spacer(),
                     U.Button(
                       title: 'send',

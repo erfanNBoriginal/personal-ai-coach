@@ -6,7 +6,7 @@ import 'package:personal_ai_coach/modules/home/home.dart';
 final rootNavKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
-  initialLocation: Chat.route,
+  initialLocation: ChatPge.route,
   navigatorKey: rootNavKey,
 
   routes: [
@@ -22,9 +22,9 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: Chat.route,
-              name: Chat.route,
-              builder: (context, state) => Chat(),
+              path: ChatPge.route,
+              name: ChatPge.route,
+              builder: (context, state) => ChatPge(),
             ),
           ],
         ),
