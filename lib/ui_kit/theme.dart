@@ -12,7 +12,6 @@ class Theme {
     background2: Color(0xFFE3F0FF),
     background3: Color(0xFFE8C2FF),
   );
-
   // Text colors
   static final primaryText = Color(0xFF352A7C);
   static final secondaryText = Color(0xFFFFFFFF);
@@ -52,4 +51,6 @@ class LinearBackground {
     required this.background2,
     required this.background3,
   });
+
+  List<Color> get getColors => [background1, background2, background3];
 }

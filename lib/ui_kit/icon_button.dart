@@ -12,7 +12,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     required this.onTapped,
     required this.size,
-    this.color = const Color(0xFF9DCBEC),
+    this.color ,
   });
 
   @override
@@ -21,9 +21,12 @@ class IconButton extends StatelessWidget {
       decoration: BoxDecoration(
         border: BoxBorder.all(width: 1, color: U.Theme.secondaryButton),
         borderRadius: BorderRadius.circular(50),
-        color: color ?? Colors.white.withValues(alpha: 0.0),
+        color: color ?? Colors.white.withValues(alpha: 1.0),
       ),
-      child: U.Image.icon(path: icon, size: size),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 19.0,vertical: 9),
+        child: U.Image.icon(path: icon, size: size),
+      ),
     );
   }
 }

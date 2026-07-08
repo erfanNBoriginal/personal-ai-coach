@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_ai_coach/modules/chat/goal_textfield.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class Chat extends StatelessWidget {
@@ -8,49 +9,82 @@ class Chat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(color: Colors.amber, height: 122),
-        
-           Positioned.fill(
-             child: U.NavigationBar(
-               navItems: [
-                 U.NavBarItem(
-                   isPrimary: true,
-                   title: 'title',
-                   path: U.Icons.menu,
-                   onTap: () {},
-                 ),
-                 U.NavBarItem(
-                   isPrimary: true,
-                   title: 'title',
-                   path: U.Icons.menu,
-                   onTap: () {},
-                 ),
-                 U.NavBarItem(
-                   isPrimary: false,
-                   title: 'title',
-                   path: U.Icons.menu,
-                   onTap: () {},
-                 ),
-                 U.NavBarItem(
-                   isPrimary: false,
-                   title: 'fuck',
-                   path: U.Icons.menu,
-                   onTap: () {},
-                 ),
-                 U.NavBarItem(
-                   isPrimary: false,
-                   title: 'shiiiiit',
-                   path: U.Icons.menu,
-                   onTap: () {},
-                 ),
-               ],
-             ),
-           ),
-     
-        // Container(color: Colors.amber, height: 122),
-      ],
+    return  Container(
+        // backgroundColor: U.Theme.afternoonPallet,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: U.Theme.afternoonPallet.getColors,
+            begin: AlignmentGeometry.topCenter,
+            end: AlignmentGeometry.bottomCenter,
+          ),
+        ),
+        child: ListView(
+          children: [
+            U.AppBar(title: 'create'),
+            SizedBox(height: 155,),
+            Align(
+              alignment: AlignmentGeometry.center,
+              child: U.Text(
+                text: 'describe your goal!',
+                textWeight: U.TextWeight.bold,
+                textSize: U.TextSize.s18,
+              ),
+            ),
+            SizedBox(height: 15),
+            Align(
+              alignment: AlignmentGeometry.center,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: GoalTextfield(),
+              ),
+            ),
+          ],
+        ),
+        //   Stack(
+        //     children: [
+        //       // Container(color: Colors.amber, height: 122),
+        //       Positioned.fill(
+        //         child: U.NavigationBar(
+        //           navItems: [
+        //             U.NavBarItem(
+        //               isPrimary: true,
+        //               title: 'title',
+        //               path: U.Icons.menu,
+        //               onTap: () {},
+        //             ),
+        //             U.NavBarItem(
+        //               isPrimary: true,
+        //               title: 'title',
+        //               path: U.Icons.menu,
+        //               onTap: () {},
+        //             ),
+        //             U.NavBarItem(
+        //               isPrimary: false,
+        //               title: 'title',
+        //               path: U.Icons.menu,
+        //               onTap: () {},
+        //             ),
+        //             U.NavBarItem(
+        //               isPrimary: false,
+        //               title: 'fuck',
+        //               path: U.Icons.menu,
+        //               onTap: () {},
+        //             ),
+        //             U.NavBarItem(
+        //               isPrimary: false,
+        //               title: 'shiiiiit',
+        //               path: U.Icons.menu,
+        //               onTap: () {},
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+
+        //       // Container(color: Colors.amber, height: 122),
+        //     ],
+        //   ),
+        // ),
+      
     );
   }
 }

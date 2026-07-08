@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:personal_ai_coach/modules/chat/chat.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class HomeSell extends StatelessWidget {
@@ -12,13 +14,11 @@ class HomeSell extends StatelessWidget {
       backgroundColor: Colors.grey,
       body: Stack(
         children: [
-              
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: child),
-             Positioned(
+          // Positioned.fill(child: child),
+          Positioned(top: 0, left: 0, right: 0,
+          bottom: 0,
+           child: child),
+          Positioned.fill(
             bottom: 0,
             left: 0,
             right: 0,
@@ -33,7 +33,15 @@ class HomeSell extends StatelessWidget {
                 U.NavBarItem(
                   isPrimary: true,
                   title: 'title',
-                  path: U.Icons.menu,
+                  path: U.Icons.chat,
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(Chat.route);
+                  },
+                ),
+                U.NavBarItem(
+                  isPrimary: false,
+                  title: 'title',
+                  path: U.Icons.back,
                   onTap: () {},
                 ),
                 U.NavBarItem(
@@ -51,7 +59,6 @@ class HomeSell extends StatelessWidget {
               ],
             ),
           ),
-     
         ],
       ),
     );

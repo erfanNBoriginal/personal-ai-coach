@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
+
+class GoalTextfield extends StatelessWidget {
+  const GoalTextfield({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: U.Theme.background.withValues(alpha: 0.7),
+      ),
+      height: 272,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            TextField(
+              maxLines: null,
+              minLines: null,
+              expands: true,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero,
+                isDense: true,
+                border: InputBorder.none,
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: U.Theme.background,
+                child: Row(
+                  children: [
+                    U.IconButton(icon: U.Icons.wrong, onTapped: () {}, size: 22),
+                    Spacer(),
+                    U.Button(
+                      title: 'send',
+                      onTap: () {},
+                      buttonColor: U.ButtonColor.primary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

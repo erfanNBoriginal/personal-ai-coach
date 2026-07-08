@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/modules/chat/chat.dart';
+import 'package:personal_ai_coach/modules/home/home.dart';
 
 final rootNavKey = GlobalKey<NavigatorState>();
 
@@ -9,10 +10,25 @@ final router = GoRouter(
   navigatorKey: rootNavKey,
 
   routes: [
-    GoRoute(
-      path: Chat.route,
-      name: Chat.route,
-      builder: (context, state) => Chat(),
+    // GoRoute(
+    //   path: Chat.route,
+    //   name: Chat.route,
+    //   builder: (context, state) => Chat(),
+    // ),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) =>
+          HomeSell(child: navigationShell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Chat.route,
+              name: Chat.route,
+              builder: (context, state) => Chat(),
+            ),
+          ],
+        ),
+      ],
     ),
     // ShellRoute(
     //   builder: (context, state, child) {
