@@ -7,4 +7,6 @@ class BusinessServers {
   String get current => develop;
 }
 
-class BusinessUrls {}
+class BusinessUrls {
+  final createGoal = 'https://api.groq.com/openai/v1/chat/completions';
+}

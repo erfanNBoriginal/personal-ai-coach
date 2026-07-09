@@ -17,7 +17,7 @@ class BusinessClient {
   }
 
   final _dio = Dio();
-  
+
   Options buildReqOptions({String? accessToken}) {
     return Options(
       headers: {
@@ -44,7 +44,7 @@ class BusinessClient {
     return res.data;
   }
 
-  Future<void> post({
+  Future<dynamic> post({
     required String url,
     required Map<String, dynamic> data,
     String? accessToken,
