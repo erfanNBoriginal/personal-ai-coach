@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
+import 'package:personal_ai_coach/modules/chat/cubit/chat_cubit.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class GoalTextfield extends StatelessWidget {
@@ -9,7 +12,6 @@ class GoalTextfield extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: U.Theme.secondaryButton),
-
         borderRadius: BorderRadius.circular(20),
         color: U.Theme.background.withValues(alpha: 0.9),
       ),
@@ -19,6 +21,7 @@ class GoalTextfield extends StatelessWidget {
         child: Stack(
           children: [
             TextField(
+              controller: context.read<ChatCubit>().goalCtrl,
               maxLines: null,
               minLines: null,
               expands: true,
@@ -37,11 +40,23 @@ class GoalTextfield extends StatelessWidget {
                 child: Row(
                   children: [
                     // U.IconButton(icon: U.Icons.wrong, onTapped: () {}, size: 22),
-                    U.OutlineIconButton(onTap: () {}, path: U.Icons.wrong,),
+                    U.OutlineIconButton(onTap: () {}, path: U.Icons.wrong),
                     Spacer(),
                     U.Button(
                       title: 'send',
-                      onTap: () {},
+                      onTap: () async {
+                        final res = await context
+                            .read<ChatCubit>()
+                            .onGoalCreated(
+                              message: Message(
+                                role: 'user',
+                                content: context
+                                    .read<ChatCubit>()
+                                    .goalCtrl
+                                    .text,
+                              ),
+                            );
+                      },
                       buttonColor: U.ButtonColor.primary,
                     ),
                   ],

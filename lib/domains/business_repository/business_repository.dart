@@ -9,8 +9,10 @@ class BusinessRepository {
     content:
         'You are responsible for collecting the minimum information needed to generate a personalized roadmap. Ask exactly one question at a time. Return only valid JSON matching the schema below. Never return Markdown or explanations. When enough information has been collected, return completed. Example: { type: follow_up_question, completed: false, question: { id: experience, title: Programming Experience, description: This helps estimate your learning timeline., inputType: single_choice, options: [ { id: beginner, label: Im completely new }, { id: some, label: Ive built a few projects }, { id: professional, label: Im already a developer } ] } }',
   );
+  final List<Message> messages = [];
 
-  Future<dynamic> createCredentials({required List<Message> messages}) async {
+  Future<dynamic> createCredentials({required Message message}) async {
+    messages.add(message);
     messages.insert(0, followUpQuestionPrompt);
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.createGoal,

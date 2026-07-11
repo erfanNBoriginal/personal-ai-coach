@@ -5,6 +5,7 @@ import 'package:personal_ai_coach/domains/business_repository/models/message.dar
 import 'package:personal_ai_coach/modules/chat/chat_bubble.dart';
 import 'package:personal_ai_coach/modules/chat/cubit/chat_cubit.dart';
 import 'package:personal_ai_coach/modules/chat/goal_textfield.dart';
+import 'package:personal_ai_coach/ui_kit/outline_button.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class ChatPge extends StatelessWidget {
@@ -21,7 +22,7 @@ class ChatPge extends StatelessWidget {
         builder: (context, state) {
           return state.loading
               ? Center(child: CircularProgressIndicator())
-              : state.messages.isNotEmpty
+              : state.questions.isNotEmpty
               ? Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -33,11 +34,13 @@ class ChatPge extends StatelessWidget {
                   child: ListView(
                     padding: EdgeInsets.all(24),
                     children: [
-                      ...state.messages.expand(
+                      ...state.questions.expand(
                         (e) => [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              ChatBubble(text: state.messages[0].content,rtl: true,),
+                              SizedBox(height: 16,),
                               Directionality(
                                 textDirection: TextDirection.ltr,
                                 child: ChatBubble(text: e.description),
@@ -53,6 +56,8 @@ class ChatPge extends StatelessWidget {
                                           flex: 80,
                                           child: U.OutlineButton(
                                             title: e.label,
+                                            foregroundColor:
+                                                OutLineButtonForeground.primary,
                                             onTap: () {},
                                           ),
                                         ),
@@ -60,7 +65,7 @@ class ChatPge extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                              SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                 ],
                               ),
                             ],
@@ -92,18 +97,7 @@ class ChatPge extends StatelessWidget {
                             Column(
                               children: [
                                 GestureDetector(
-                                  onTap: () async {
-                                    final res = await context
-                                        .read<ChatCubit>()
-                                        .onGoalCreated(
-                                          messages: [
-                                            Message(
-                                              role: 'user',
-                                              content: 'i want to be a pianist',
-                                            ),
-                                          ],
-                                        );
-                                  },
+                                  onTap: () async {},
                                   child: U.Text(
                                     text: 'describe your goal!',
                                     textWeight: U.TextWeight.bold,
