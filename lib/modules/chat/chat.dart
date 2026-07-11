@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
+import 'package:personal_ai_coach/modules/chat/chat_bubble.dart';
 import 'package:personal_ai_coach/modules/chat/cubit/chat_cubit.dart';
 import 'package:personal_ai_coach/modules/chat/goal_textfield.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
@@ -18,12 +19,57 @@ class ChatPge extends StatelessWidget {
           ChatCubit(repository: context.read<BusinessRepository>()),
       child: BlocBuilder<ChatCubit, ChatState>(
         builder: (context, state) {
-          print('state.messages!.length');
-          print(state.messages!.length);
           return state.loading
               ? Center(child: CircularProgressIndicator())
-              : state.messages!.isNotEmpty
-              ? Column(children: [U.Text(text: state.messages![2].content)])
+              : state.messages.isNotEmpty
+              ? Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: U.Theme.afternoonPallet.getColors,
+                      begin: AlignmentGeometry.topCenter,
+                      end: AlignmentGeometry.bottomCenter,
+                    ),
+                  ),
+                  child: ListView(
+                    padding: EdgeInsets.all(24),
+                    children: [
+                      ...state.messages.expand(
+                        (e) => [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Directionality(
+                                textDirection: TextDirection.ltr,
+                                child: ChatBubble(text: e.description),
+                              ),
+                              SizedBox(height: 19),
+                              ...e.questions.expand(
+                                (e) => [
+                                  Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                          flex: 80,
+                                          child: U.OutlineButton(
+                                            title: e.label,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                        Flexible(flex: 20, child: SizedBox()),
+                                      ],
+                                    ),
+                                  ),
+                              SizedBox(height: 16),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               : Container(
                   // backgroundColor: U.Theme.afternoonPallet,
                   decoration: BoxDecoration(
@@ -53,7 +99,7 @@ class ChatPge extends StatelessWidget {
                                           messages: [
                                             Message(
                                               role: 'user',
-                                              content: 'hey',
+                                              content: 'i want to be a pianist',
                                             ),
                                           ],
                                         );

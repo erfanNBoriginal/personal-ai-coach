@@ -6,7 +6,7 @@ class FollowupQuestion {
   final String label;
   final String description;
   final String inputType;
-  // final List<Question> questions;
+  final List<Question> questions;
 
   FollowupQuestion({
     required this.isCompleted,
@@ -14,7 +14,7 @@ class FollowupQuestion {
     required this.label,
     required this.description,
     required this.inputType,
-    // required this.questions,
+    required this.questions,
   });
 
   factory FollowupQuestion.fromMap(Map<String, dynamic> map) {
@@ -24,7 +24,9 @@ class FollowupQuestion {
       label: map['question']['title'],
       description: map['question']['description'],
       inputType: map['question']['inputType'],
-      // questions: map['question']['options'].map((e) => Question.fromMap(e)),
+      questions: List.from(map['question']['options'])
+          .map((e) => Question.fromMap(e))
+          .toList(),
     );
   }
 }

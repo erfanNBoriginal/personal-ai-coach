@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
-
-
 class ChatBubble extends StatelessWidget {
   final String text;
 
@@ -14,11 +12,22 @@ class ChatBubble extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: U.Theme.secondaryButton,
-        boxShadow: [BoxShadow(blurRadius: 10, color: U.Theme.shadow)],
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(4, 4),
+            blurRadius: 10,
+            color: U.Theme.shadow.withValues(alpha: 0.25),
+          ),
+        ],
       ),
       child: Padding(
         padding: EdgeInsetsGeometry.all(16),
-        child: U.Text(text: text),
+        child: U.Text(
+          text: text,
+          textWeight: U.TextWeight.md,
+          textSize: U.TextSize.s16,
+        color: U.Theme.white,
+        ),
       ),
     );
   }

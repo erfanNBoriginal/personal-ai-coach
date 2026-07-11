@@ -20,9 +20,9 @@ class OutlineButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.onTap,
-    required this.color,
-    required this.size,
-    required this.foregroundColor,
+    this.color = OutLineButtonColor.primary,
+    this.size = OutlineButtonSize.medium,
+    this.foregroundColor = OutLineButtonForeground.secondary,
     this.leading,
   });
 
@@ -87,11 +87,13 @@ class OutlineButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
         child: Center(
-          child:   Row(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (leading != null) ...[SizedBox(width: 15), leading!],
               U.Text(
                 text: title,
+                color: _color.text,
                 textSize: _color.size,
                 textWeight: _color.weight,
               ),
