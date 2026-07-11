@@ -37,6 +37,9 @@ class Theme {
   // Border
   static final primaryBorder = Color(0xFF9D89E8);
 
+  // Shadow
+  static final shadow = Color(0xFF143C6D);
+
   // Radius
   static double radius = 50.0;
 }

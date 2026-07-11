@@ -10,10 +10,10 @@ class BusinessClient {
     required this.onError,
     required this.onUnauthorized,
   }) {
-    _dio.options.baseUrl = baseUrl;
+    // _dio.options.baseUrl = baseUrl;
     addRequestInterceptor();
     addErrorInterceptor();
-    addErrorInterceptor();
+    addResponseInterceptor();
   }
 
   final _dio = Dio();
@@ -57,6 +57,8 @@ class BusinessClient {
       );
       return res.data;
     } on DioException catch (e) {
+      print('erooooooooooooooooooooor');
+      print(e);
       if (e.response?.data != null) {
         return e.response!.data;
       } else {
@@ -86,7 +88,10 @@ class BusinessClient {
             error.response?.data = BusinessResponse.fromMap(
               error.response?.data,
             );
+            print('noooooooooooooooooo eror');
+            print(error);
           } catch (e) {
+            print('errrrrrrrrrrrrrrrrrrrrrrrrrrror');
             exceptionHandler(error);
             handler.next(error);
           }
@@ -101,6 +106,8 @@ class BusinessClient {
         onRequest: (req, handler) {
           req.data = nullKiller(req.data);
           req.queryParameters = qpNullKiller(req.queryParameters);
+          print('requersssssssssssssssssssssssss');
+          print(req.data);
           handler.next(req);
         },
       ),
@@ -111,6 +118,10 @@ class BusinessClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onResponse: (response, handler) {
+          print('response');
+          print(response);
+          print('response.dataaaa');
+          print(response.data);
           response.data = BusinessResponse.fromMap(response.data);
           handler.next(response);
         },
