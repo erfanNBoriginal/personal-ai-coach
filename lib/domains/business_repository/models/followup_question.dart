@@ -24,9 +24,11 @@ class FollowupQuestion {
       label: map['question']['title'],
       description: map['question']['description'],
       inputType: map['question']['inputType'],
-      questions: List.from(map['question']['options'])
-          .map((e) => Question.fromMap(e))
-          .toList(),
+      questions: map['completed'] == true
+          ? []
+          : List.from(
+              map['question']['options'],
+            ).map((e) => Question.fromMap(e)).toList(),
     );
   }
 }

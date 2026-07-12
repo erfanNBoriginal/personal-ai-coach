@@ -106,8 +106,8 @@ class BusinessClient {
         onRequest: (req, handler) {
           req.data = nullKiller(req.data);
           req.queryParameters = qpNullKiller(req.queryParameters);
-          print('requersssssssssssssssssssssssss');
-          print(req.data);
+          // print('requersssssssssssssssssssssssss');
+          // print(req.data);
           handler.next(req);
         },
       ),

@@ -10,7 +10,7 @@ class Message {
     );
   }
 
-  Map<String, dynamic> toMap(Message message) {
+  Map<String, dynamic> toMap() {
     return {'role': role, 'content': content};
   }
 

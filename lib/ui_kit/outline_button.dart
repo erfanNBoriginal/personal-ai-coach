@@ -9,6 +9,7 @@ enum OutLineButtonColor { primary, secondary, tertiary }
 enum OutLineButtonForeground { primary, secondary, tertiary }
 
 class OutlineButton extends StatelessWidget {
+  final bool disabled;
   final String title;
   final Function() onTap;
   final OutLineButtonColor color;
@@ -18,6 +19,7 @@ class OutlineButton extends StatelessWidget {
 
   const OutlineButton({
     super.key,
+    this.disabled = false,
     required this.title,
     required this.onTap,
     this.color = OutLineButtonColor.primary,
@@ -79,10 +81,10 @@ class OutlineButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: _foregroundColor,
-      borderRadius: BorderRadiusGeometry.all( Radius.circular(50)) , 
+      borderRadius: BorderRadiusGeometry.all(Radius.circular(50)),
       child: InkWell(
-        borderRadius: BorderRadius.circular(50), 
-        onTap: () => onTap,
+        borderRadius: BorderRadius.circular(50),
+        onTap: disabled ? null : onTap,
         child: Container(
           height: _size,
           decoration: BoxDecoration(

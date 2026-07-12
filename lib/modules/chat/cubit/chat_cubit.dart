@@ -22,14 +22,18 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> onInit() async {}
 
   Future<void> onGoalCreated({required Message message}) async {
+    // print('heyyyy');
     emit(state.copyWith(loading: true));
-    final res = await _repo.createCredentials(message: message);
+    final messagesList = [...state.messages];
+    messagesList.add(message);
+    final res = await _repo.createCredentials(messages: messagesList);
     final Map<String, dynamic> questionJson = jsonDecode(
       res['message']['content'],
     );
+    print('questionJsonnnnnnnnn: $questionJson');
     final lastMessage = Message.fromMap(res['message']);
-    final messagesList = [message, ...state.messages, lastMessage];
     final lastQuestion = FollowupQuestion.fromMap(questionJson);
+    messagesList.add(lastMessage);
     final questionsList = [...state.questions, lastQuestion];
     emit(
       state.copyWith(
@@ -39,5 +43,11 @@ class ChatCubit extends Cubit<ChatState> {
         messages: messagesList,
       ),
     );
+  }
+
+  void onAnswerSelected(Question question) {
+    List<Question> list = [...state.selectedQuestions];
+    list.add(question);
+    emit(state.copyWith(selectedQuestions: list));
   }
 }
