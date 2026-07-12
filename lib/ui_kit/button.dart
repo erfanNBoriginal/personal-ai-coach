@@ -73,6 +73,7 @@ class Button extends StatelessWidget {
         ),
         child: Center(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (leading != null) ...[SizedBox(width: 9.2), leading!],
               U.Text(

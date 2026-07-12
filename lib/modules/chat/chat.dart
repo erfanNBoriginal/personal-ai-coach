@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal_ai_coach/ui_kit/button.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
@@ -96,60 +97,96 @@ class _ChatPgeState extends State<ChatPge> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 16),
-                          Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: ChatBubble(text: value.description),
-                          ),
-                          const SizedBox(height: 19),
-                          ...value.questions.expand((e) {
-                            final res = state.selectedQuestions.where(
-                              (b) => b.id == e.id,
-                            );
-                            return [
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Row(
+                          !value.isCompleted
+                              ? Column(
                                   children: [
-                                    Flexible(
-                                      flex: 80,
-                                      child: U.OutlineButton(
-                                        title: e.label,
-                                        disabled:
-                                            key < state.questions.length - 1,
-                                        foregroundColor: res.isNotEmpty
-                                            ? OutLineButtonForeground.secondary
-                                            : OutLineButtonForeground.primary,
-                                        onTap: () async {
-                                          await context
-                                              .read<ChatCubit>()
-                                              .onGoalCreated(
-                                                message: Message.user(
-                                                  content: e.label,
-                                                ),
-                                              );
-                                          context
-                                              .read<ChatCubit>()
-                                              .onAnswerSelected(e);
-                                        },
+                                    Directionality(
+                                      textDirection: TextDirection.ltr,
+                                      child: ChatBubble(
+                                        text: value.description!,
                                       ),
                                     ),
-                                    const Flexible(flex: 20, child: SizedBox()),
+                                    const SizedBox(height: 19),
+                                    ...value.questions.expand((e) {
+                                      final res = state.selectedQuestions.where(
+                                        (b) => b.id == e.id,
+                                      );
+                                      return [
+                                        Directionality(
+                                          textDirection: TextDirection.rtl,
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                flex: 80,
+                                                child: U.OutlineButton(
+                                                  title: e.label ?? '',
+                                                  disabled:
+                                                      key <
+                                                      state.questions.length -
+                                                          1,
+                                                  foregroundColor:
+                                                      res.isNotEmpty
+                                                      ? OutLineButtonForeground
+                                                            .secondary
+                                                      : OutLineButtonForeground
+                                                            .primary,
+                                                  onTap: () async {
+                                                    await context
+                                                        .read<ChatCubit>()
+                                                        .onGoalCreated(
+                                                          message: Message.user(
+                                                            content:
+                                                                e.label ?? '',
+                                                          ),
+                                                        );
+                                                    if (!mounted) return;
+                                                    context
+                                                        .read<ChatCubit>()
+                                                        .onAnswerSelected(e);
+                                                  },
+                                                ),
+                                              ),
+                                              const Flexible(
+                                                flex: 20,
+                                                child: SizedBox(),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                      ];
+                                    }),
+                                  ],
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const ChatBubble(
+                                      text:
+                                          'congrates click to get your roadmap!',
+                                    ),
+                                    SizedBox(height: 16),
+                                    SizedBox(
+                                      width: 207,
+                                      child: U.Button(
+                                        title: 'roadmap',
+                                        onTap: () {},
+                                        buttonColor: U.ButtonColor.primary,
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(height: 16),
-                            ];
-                          }),
-                          (index == state.questions.length) && state.loading
+                          (index == state.questions.length && state.loading)
                               ? Center(
-                                child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: const [
                                       SizedBox(height: 14),
                                       CircularProgressIndicator(),
                                     ],
                                   ),
-                              )
+                                )
                               : const SizedBox(),
                         ],
                       );

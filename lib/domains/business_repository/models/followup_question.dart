@@ -2,33 +2,38 @@ import 'dart:core';
 
 class FollowupQuestion {
   final bool isCompleted;
-  final String id;
-  final String label;
-  final String description;
-  final String inputType;
+  final String? id;
+  final String? label;
+  final String? description;
+  final String? inputType;
   final List<Question> questions;
 
   FollowupQuestion({
     required this.isCompleted,
-    required this.id,
-    required this.label,
-    required this.description,
-    required this.inputType,
+    this.id,
+    this.label,
+    this.description,
+    this.inputType,
     required this.questions,
   });
 
   factory FollowupQuestion.fromMap(Map<String, dynamic> map) {
+    final isCompleted = map['completed'] == true;
+    final questionMap = map['question'] as Map<String, dynamic>?;
+
+    if (isCompleted || questionMap == null) {
+      return FollowupQuestion(isCompleted: isCompleted, questions: []);
+    }
+
     return FollowupQuestion(
-      isCompleted: map['completed'],
-      id: map['question']['id'],
-      label: map['question']['title'],
-      description: map['question']['description'],
-      inputType: map['question']['inputType'],
-      questions: map['completed'] == true
-          ? []
-          : List.from(
-              map['question']['options'],
-            ).map((e) => Question.fromMap(e)).toList(),
+      isCompleted: isCompleted,
+      id: questionMap['id'],
+      label: questionMap['title'],
+      description: questionMap['description'],
+      inputType: questionMap['inputType'],
+      questions: List.from(
+        questionMap['options'],
+      ).map((e) => Question.fromMap(e)).toList(),
     );
   }
 }
