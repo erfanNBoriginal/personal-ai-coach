@@ -28,15 +28,17 @@ class _ChatPgeState extends State<ChatPge> {
 
   void _scrollToLast(int itemCount) {
     if (itemCount <= 0) return;
-    // Wait a frame so the list has laid out before we try to scroll to it.
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_itemScrollController.isAttached) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_itemScrollController.isAttached) return;
+
         _itemScrollController.scrollTo(
           index: itemCount - 1,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeOut,
         );
-      }
+      });
     });
   }
 
@@ -47,7 +49,9 @@ class _ChatPgeState extends State<ChatPge> {
           ChatCubit(repository: context.read<BusinessRepository>()),
       child: BlocConsumer<ChatCubit, ChatState>(
         listenWhen: (previous, current) =>
-            !current.loading && current.questions.isNotEmpty,
+            previous.loading &&
+            !current.loading &&
+            current.questions.isNotEmpty,
         listener: (context, state) {
           // +1 for the leading "message" bubble, +1 for the trailing spacer
           final itemCount = state.questions.length + 2;
