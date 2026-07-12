@@ -61,6 +61,7 @@ class _ChatPgeState extends State<ChatPge> {
           }
         },
         builder: (context, state) {
+          final chatCubit = context.read<ChatCubit>();
           return
           // state.loading
           //     ? const Center(child: CircularProgressIndicator())
@@ -135,18 +136,17 @@ class _ChatPgeState extends State<ChatPge> {
                                                       : OutLineButtonForeground
                                                             .primary,
                                                   onTap: () async {
-                                                    await context
-                                                        .read<ChatCubit>()
+                                                    await chatCubit
                                                         .onGoalCreated(
                                                           message: Message.user(
                                                             content:
                                                                 e.label ?? '',
                                                           ),
                                                         );
-                                                    if (!mounted) return;
-                                                    context
-                                                        .read<ChatCubit>()
-                                                        .onAnswerSelected(e);
+
+                                                    chatCubit.onAnswerSelected(
+                                                      e,
+                                                    );
                                                   },
                                                 ),
                                               ),
@@ -174,7 +174,13 @@ class _ChatPgeState extends State<ChatPge> {
                                       width: 207,
                                       child: U.Button(
                                         title: 'roadmap',
-                                        onTap: () {},
+                                        onTap: () {
+                                          // print(state.messages.length);
+                                          // for(var e = 0; e < state.messages.length; e++) {
+                                          //   print(state.messages[e].toMap());
+                                          // }
+                                          chatCubit.onCreateRoadmap();
+                                        },
                                         buttonColor: U.ButtonColor.primary,
                                       ),
                                     ),

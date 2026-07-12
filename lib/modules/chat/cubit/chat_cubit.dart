@@ -30,7 +30,6 @@ class ChatCubit extends Cubit<ChatState> {
     final Map<String, dynamic> questionJson = jsonDecode(
       res['message']['content'],
     );
-    print('questionJsonnnnnnnnn: $questionJson');
     final lastMessage = Message.fromMap(res['message']);
     final lastQuestion = FollowupQuestion.fromMap(questionJson);
     messagesList.add(lastMessage);
@@ -49,5 +48,27 @@ class ChatCubit extends Cubit<ChatState> {
     List<Question> list = [...state.selectedQuestions];
     list.add(question);
     emit(state.copyWith(selectedQuestions: list));
+  }
+
+  void onCreateRoadmap() {
+    // emit(state.copyWith(loading: true));
+    Map<String, String> roadmapMap = {};
+    roadmapMap = {'user goal': '${state.goal}'};
+    for (var e = 0; e <= state.selectedQuestions.length - 1; e++) {
+      roadmapMap.addEntries(
+        <String, String>{
+          state.selectedQuestions[e].questionLabel:
+              state.selectedQuestions[e].label,
+        }.entries,
+      );
+    }
+    // state.selectedQuestions.map(
+    //   (e) => roadmapMap.addEntries(
+    //     <String, String>{e.questionLabel: e.label}.entries,
+    //   ),
+    // );
+    print('roadmapMappppppppppppppppppppp');
+    print(state.selectedQuestions.length);
+    print(roadmapMap);
   }
 }

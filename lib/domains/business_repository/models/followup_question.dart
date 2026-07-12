@@ -31,9 +31,9 @@ class FollowupQuestion {
       label: questionMap['title'],
       description: questionMap['description'],
       inputType: questionMap['inputType'],
-      questions: List.from(
-        questionMap['options'],
-      ).map((e) => Question.fromMap(e)).toList(),
+      questions: List.from(questionMap['options'])
+          .map((e) => Question.fromMap(e, questionLabel: questionMap['id']))
+          .toList(),
     );
   }
 }
@@ -41,9 +41,21 @@ class FollowupQuestion {
 class Question {
   final String id;
   final String label;
-  Question({required this.id, required this.label});
+  final String questionLabel;
+  Question({
+    required this.id,
+    required this.label,
+    required this.questionLabel,
+  });
 
-  factory Question.fromMap(Map<String, dynamic> map) {
-    return Question(id: map['id'], label: map['label']);
+  factory Question.fromMap(
+    Map<String, dynamic> map, {
+    required String questionLabel,
+  }) {
+    return Question(
+      id: map['id'],
+      label: map['label'],
+      questionLabel: questionLabel,
+    );
   }
 }
