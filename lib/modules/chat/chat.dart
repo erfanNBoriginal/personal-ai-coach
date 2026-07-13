@@ -179,7 +179,7 @@ class _ChatPgeState extends State<ChatPge> {
                                           // for(var e = 0; e < state.messages.length; e++) {
                                           //   print(state.messages[e].toMap());
                                           // }
-                                          chatCubit.onCreateRoadmap();
+                                          chatCubit.onRoadmapGenrated();
                                         },
                                         buttonColor: U.ButtonColor.primary,
                                       ),

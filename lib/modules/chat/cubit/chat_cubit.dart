@@ -7,6 +7,7 @@ import 'package:personal_ai_coach/domains/business_repository/business_repositor
 import 'package:personal_ai_coach/domains/business_repository/models/followup_question.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/goal.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
 import 'package:uuid/uuid.dart';
 
 part 'chat_state.dart';
@@ -50,7 +51,7 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(selectedQuestions: list));
   }
 
-  void onCreateRoadmap() {
+  Future<Roadmap> onRoadmapGenrated() async {
     // emit(state.copyWith(loading: true));
     Map<String, String> roadmapMap = {};
     roadmapMap = {'user goal': '${state.goal}'};
@@ -62,13 +63,18 @@ class ChatCubit extends Cubit<ChatState> {
         }.entries,
       );
     }
-    // state.selectedQuestions.map(
-    //   (e) => roadmapMap.addEntries(
-    //     <String, String>{e.questionLabel: e.label}.entries,
-    //   ),
-    // );
-    print('roadmapMappppppppppppppppppppp');
-    print(state.selectedQuestions.length);
-    print(roadmapMap);
+    print('roadmappppppppppppppp');
+    print(roadmapMap.toString());
+    final res = await _repo.createRoadmap(
+      message: Message.user(content: roadmapMap.toString()),
+    );
+    final Map<String, dynamic> roadmapJson = jsonDecode(
+      res['message']['content'],
+    );
+    final roadmap = Roadmap.fromMap(roadmapJson);
+    print('roadmap.milestones.lengthtttttttttttttttttt');
+    print(roadmap.milestones.length);
+    print(roadmap.summary);
+    return roadmap;
   }
 }
