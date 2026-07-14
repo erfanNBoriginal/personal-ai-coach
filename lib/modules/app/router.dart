@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:personal_ai_coach/modules/chat/chat.dart';
+import 'package:personal_ai_coach/modules/chat/chat_page.dart';
 import 'package:personal_ai_coach/modules/home/home.dart';
 import 'package:personal_ai_coach/modules/roadmap/roadmap_page.dart';
 
 final rootNavKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
-  initialLocation: RoadmapPage.route,
+  initialLocation: ChatPge.route,
   navigatorKey: rootNavKey,
 
   routes: [
@@ -30,7 +30,8 @@ final router = GoRouter(
             GoRoute(
               path: RoadmapPage.route,
               name: RoadmapPage.route,
-              builder: (context, state) => RoadmapPage(),
+              builder: (context, state) =>
+                  RoadmapPage(roadMap: state.extra as dynamic),
             ),
           ],
         ),

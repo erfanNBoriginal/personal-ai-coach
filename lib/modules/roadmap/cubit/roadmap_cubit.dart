@@ -5,5 +5,13 @@ import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dar
 part 'roadmap_state.dart';
 
 class RoadmapCubit extends Cubit<RoadmapState> {
-  RoadmapCubit() : super(RoadmapState.init());
+  final Roadmap? initialRoadmap;
+
+  RoadmapCubit({this.initialRoadmap}) : super(RoadmapState.init()) {
+    onInit();
+  }
+
+  void onInit() {
+    emit(state.copyWith(roadmap: initialRoadmap));
+  }
 }

@@ -6,6 +6,7 @@ class Stepper extends StatefulWidget {
   final bool shrinkWrap;
   final ScrollPhysics? physics;
   final bool isMoveable;
+  final bool useDashedLine;
 
   const Stepper({
     super.key,
@@ -13,6 +14,7 @@ class Stepper extends StatefulWidget {
     this.shrinkWrap = true,
     this.physics,
     this.isMoveable = false,
+    this.useDashedLine = false,
   });
 
   @override
@@ -48,100 +50,149 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
 
           return Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                Column(
+                // Dynamic connector.
+                //
+                // Its height is based on the real height of the Row/step content.
+                // It begins below this bullet and reaches the next bullet.
+                if (index != widget.items.length - 1)
+                  Positioned(
+                    left: 5.0, // (18 bullet width - 3 line width) / 2
+                    top: widget.useDashedLine
+                        ? 18
+                        : 23, // directly below this item's bullet
+                    bottom: widget.useDashedLine
+                        ? -18
+                        : -23, // extends through this item's bottom spacing
+                    child: widget.useDashedLine
+                        ? SizedBox(
+                            width: 3,
+                            child: VerticalDashedLine(
+                              color: U.Theme.divider,
+                              width: 3,
+                              dashHeight: 6,
+                              dashSpacing: 4,
+                              radius: 12,
+                            ),
+                          )
+                        : Container(
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            width: 3,
+                            decoration: BoxDecoration(
+                              color: U.Theme.divider,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                  ),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 32,
-                      width: 32,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: item.isDone ? Colors.green : Colors.grey,
-                      ),
+                    Column(
+                      children: [
+                        SizedBox(height: 13),
+                        Container(
+                          height: 12,
+                          width: 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: item.isDone ? Colors.green : U.Theme.primary,
+                          ),
+                        ),
+                      ],
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeInOut,
-                      width: 3,
-                      height: isExpanded ? 80 : 25,
-                      margin: const EdgeInsets.symmetric(vertical: 2),
-                      decoration: BoxDecoration(
-                        color: U.Theme.divider,
-                        borderRadius: BorderRadius.circular(12),
+
+                    const SizedBox(width: 8),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: item.isDisabled
+                                ? null
+                                : () {
+                                    setState(() {
+                                      expandedIndex = isExpanded ? null : index;
+                                    });
+                                  },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: item.isDisabled
+                                    ? U.Theme.onBackground.withValues(
+                                        alpha: 0.3,
+                                      )
+                                    : U.Theme.onBackground.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: U.Text(
+                                      text: item.title,
+                                      color: item.isDisabled
+                                          ? U.Theme.primaryText.withValues(
+                                              alpha: 0.4,
+                                            )
+                                          : U.Theme.primaryText,
+                                      textSize: U.TextSize.s16,
+                                      textWeight: U.TextWeight.semiBold,
+                                    ),
+                                  ),
+                                  AnimatedRotation(
+                                    duration: const Duration(milliseconds: 200),
+                                    turns: isExpanded ? 0.5 : 0,
+                                    child: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          ClipRect(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: AnimatedSize(
+                                duration: const Duration(milliseconds: 250),
+                                curve: Curves.easeInOut,
+                                alignment: Alignment.topCenter,
+                                child: isExpanded
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          color: U.Theme.white.withValues(
+                                            alpha: 0.5,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.grey.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                            width: 0.8,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: item.child,
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {
-                          setState(() {
-                            expandedIndex = isExpanded ? null : index;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: U.Theme.onBackground.withValues(alpha: 0.7),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: U.Text(
-                                  text: item.title,
-                                  textSize: U.TextSize.s18,
-                                  textWeight: U.TextWeight.semiBold,
-                                ),
-                              ),
-                              AnimatedRotation(
-                                duration: const Duration(milliseconds: 200),
-                                turns: isExpanded ? 0.5 : 0,
-                                child: const Icon(Icons.keyboard_arrow_down),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ClipRect(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: AnimatedSize(
-                            duration: const Duration(milliseconds: 250),
-                            curve: Curves.easeInOut,
-                            alignment: Alignment.topCenter,
-                            child: isExpanded
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                      color: U.Theme.outline.withValues(
-                                        alpha: 0.5,
-                                      ),
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                        color: Colors.grey.withValues(
-                                          alpha: 0.6,
-                                        ),
-                                        width: 0.8,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: item.child,
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -153,9 +204,56 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
 }
 
 class StepperItem {
+  final bool isDisabled;
   final bool isDone;
   final String title;
   final Widget child;
 
-  StepperItem({required this.isDone, required this.title, required this.child});
+  StepperItem({
+    this.isDisabled = false,
+    required this.isDone,
+    required this.title,
+    required this.child,
+  });
+}
+
+class VerticalDashedLine extends StatelessWidget {
+  final double width;
+  final Color color;
+  final double dashHeight;
+  final double dashSpacing;
+  final double radius;
+
+  const VerticalDashedLine({
+    super.key,
+    this.width = 3,
+    required this.color,
+    this.dashHeight = 6,
+    this.dashSpacing = 4,
+    this.radius = 12,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final dashCount = (constraints.maxHeight / (dashHeight + dashSpacing))
+            .floor();
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(dashCount, (_) {
+            return Container(
+              width: width,
+              height: dashHeight,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(radius),
+              ),
+            );
+          }),
+        );
+      },
+    );
+  }
 }

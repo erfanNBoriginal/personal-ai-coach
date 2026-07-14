@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:personal_ai_coach/modules/chat/chat.dart';
+import 'package:personal_ai_coach/modules/chat/chat_page.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class HomeSell extends StatelessWidget {

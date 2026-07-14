@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 import 'package:personal_ai_coach/modules/chat/cubit/chat_cubit.dart';
+import 'package:personal_ai_coach/modules/roadmap/roadmap_page.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class GoalTextfield extends StatelessWidget {
@@ -47,16 +49,24 @@ class GoalTextfield extends StatelessWidget {
                       onTap: () async {
                         final res = await context
                             .read<ChatCubit>()
-                            .onGoalCreated(
-                              message: Message(
-                                role: 'user',
-                                content: context
-                                    .read<ChatCubit>()
-                                    .goalCtrl
-                                    .text,
-                              ),
-                            );
+                            .onRoadmapGenrated();
+                        GoRouter.of(
+                          context,
+                        ).pushNamed(RoadmapPage.route, extra: res);
                       },
+                      // async {
+                      //   final res = await context
+                      //       .read<ChatCubit>()
+                      //       .onGoalCreated(
+                      //         message: Message(
+                      //           role: 'user',
+                      //           content: context
+                      //               .read<ChatCubit>()
+                      //               .goalCtrl
+                      //               .text,
+                      //         ),
+                      //       );
+                      // },
                       buttonColor: U.ButtonColor.primary,
                     ),
                   ],

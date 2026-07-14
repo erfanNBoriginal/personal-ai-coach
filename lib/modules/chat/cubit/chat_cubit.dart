@@ -52,7 +52,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   Future<Roadmap> onRoadmapGenrated() async {
-    // emit(state.copyWith(loading: true));
+    emit(state.copyWith(loading: true));
     Map<String, String> roadmapMap = {};
     roadmapMap = {'user goal': '${state.goal}'};
     for (var e = 0; e <= state.selectedQuestions.length - 1; e++) {
@@ -66,15 +66,18 @@ class ChatCubit extends Cubit<ChatState> {
     print('roadmappppppppppppppp');
     print(roadmapMap.toString());
     final res = await _repo.createRoadmap(
-      message: Message.user(content: roadmapMap.toString()),
+      message: Message.user(
+        content:
+            // roadmapMap.toString()
+            '{user goal: i want to be a flutter developer, experience_level: Absolute beginner (no coding experience), time_commitment: 6-15 hours per week, goal_timeline: 12 months (Slow & steady), lifestyle_constraints: Fixed work/study hours (mostly weekends/evenings)}',
+      ),
     );
     final Map<String, dynamic> roadmapJson = jsonDecode(
       res['message']['content'],
     );
     final roadmap = Roadmap.fromMap(roadmapJson);
     print('roadmap.milestones.lengthtttttttttttttttttt');
-    print(roadmap.milestones.length);
-    print(roadmap.summary);
+    emit(state.copyWith(loading: false));
     return roadmap;
   }
 }

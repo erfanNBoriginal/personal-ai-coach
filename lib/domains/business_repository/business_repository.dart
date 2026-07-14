@@ -25,21 +25,21 @@ class BusinessRepository {
 
   static Message roadmapGenerationPrompt = Message.user(
     content:
-        'You are an expert learning coach generating a personalized, realistic roadmap based on the user\'s goal and '
-        'collected profile information. Use the provided goal, experience level, time commitment, timeline, and '
-        'lifestyle constraints to structure a roadmap that is achievable and paced appropriately — do not create a '
-        'plan that is unrealistically fast or slow relative to the stated timeline and available hours per week. '
-        'Break the roadmap into sequential milestones, each with a clear title, description, start and end week, and '
-        'one checkpoint task that lets the user demonstrate they have absorbed that milestone. Milestones must '
-        'progress in difficulty from foundational to advanced. For the FIRST milestone only (order: 1), provide a '
-        'complete weeklyObjectives array containing one entry for every individual week within its startWeek and '
-        'endWeek range, with no skipped weeks. For all other milestones, return an empty weeklyObjectives array — '
-        'their weekly detail will be generated separately later, closer to when the user reaches them. Return only '
-        'valid JSON matching the schema below, with no Markdown, no explanations, and no text outside the JSON '
-        'object. Example: { type: roadmap, goal: string, summary: string, totalDurationWeeks: number, '
-        'difficultyProgression: string, milestones: [ { id: string, order: number, title: string, description: '
-        'string, startWeek: number, endWeek: number, weeklyObjectives: [ { week: number, focus: string, outcome: '
-        'string } ], checkpoint: { id: string, title: string, criteria: string } } ] }',
+'You are an expert learning coach generating a personalized, realistic roadmap based on the user\'s goal and '
+'collected profile information. Use the provided goal, experience level, time commitment, timeline, and '
+'lifestyle constraints to structure a roadmap that is achievable and paced appropriately — do not create a '
+'plan that is unrealistically fast or slow relative to the stated timeline and available hours per week. '
+'Break the roadmap into sequential milestones, each with a clear title, description, start and end week, and '
+'one checkpoint task that lets the user demonstrate they have absorbed that milestone. Milestones must '
+'progress in difficulty from foundational to advanced. For the FIRST milestone only (order: 1), provide a '
+'complete weeklyObjectives array containing one entry for every individual week within its startWeek and '
+'endWeek range, with no skipped weeks. For all other milestones, return an empty weeklyObjectives array — '
+'their weekly detail will be generated separately later, closer to when the user reaches them. Return only '
+'valid JSON matching the schema below, with no Markdown, no explanations, and no text outside the JSON '
+'object. Example: { type: roadmap, goal: string, summary: string, totalDurationWeeks: number, '
+'difficultyProgression: string, milestones: [ { id: string, order: number, title: string, description: '
+'string, startWeek: number, endWeek: number, weeklyObjectives: [ { week: number, focus: string, outcome: '
+'string } ], checkpoint: { id: string, title: string, criteria: string } } ] }',
   );
 
   late List<Message> messagesList;
@@ -62,14 +62,14 @@ class BusinessRepository {
   }
 
   Future<dynamic> createRoadmap({required Message message}) async {
-    final messageList = [];
-    messagesList.insert(0, roadmapGenerationPrompt);
-    messageList.add(message);
+    final messageListt = [];
+    messageListt.insert(0, roadmapGenerationPrompt);
+    messageListt.add(message);
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.cerebrasAi,
       data: {
         "model": "gemma-4-31b",
-        "messages": messagesList.map((e) => e.toMap()).toList(),
+        "messages": messageListt.map((e) => e.toMap()).toList(),
       },
     );
     return res.data;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:personal_ai_coach/ui_kit/button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:personal_ai_coach/modules/roadmap/roadmap_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
@@ -124,7 +125,7 @@ class _ChatPgeState extends State<ChatPge> {
                                               Flexible(
                                                 flex: 80,
                                                 child: U.OutlineButton(
-                                                  title: e.label ?? '',
+                                                  title: e.label,
                                                   disabled:
                                                       key <
                                                       state.questions.length -
@@ -139,8 +140,7 @@ class _ChatPgeState extends State<ChatPge> {
                                                     await chatCubit
                                                         .onGoalCreated(
                                                           message: Message.user(
-                                                            content:
-                                                                e.label ?? '',
+                                                            content: e.label,
                                                           ),
                                                         );
 
@@ -174,12 +174,13 @@ class _ChatPgeState extends State<ChatPge> {
                                       width: 207,
                                       child: U.Button(
                                         title: 'roadmap',
-                                        onTap: () {
-                                          // print(state.messages.length);
-                                          // for(var e = 0; e < state.messages.length; e++) {
-                                          //   print(state.messages[e].toMap());
-                                          // }
-                                          chatCubit.onRoadmapGenrated();
+                                        onTap: () async {
+                                          final res = await chatCubit
+                                              .onRoadmapGenrated();
+                                          GoRouter.of(context).pushNamed(
+                                            RoadmapPage.route,
+                                            extra: res,
+                                          );
                                         },
                                         buttonColor: U.ButtonColor.primary,
                                       ),
