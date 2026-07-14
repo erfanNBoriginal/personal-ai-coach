@@ -7,3 +7,4 @@ export 'package:personal_ai_coach/ui_kit/icon_button.dart';
 export 'package:personal_ai_coach/ui_kit/button.dart';
 export 'package:personal_ai_coach/ui_kit/outline_button.dart';
 export 'package:personal_ai_coach/ui_kit/outline_icon_button.dart';
+export 'package:personal_ai_coach/ui_kit/stepper.dart';
