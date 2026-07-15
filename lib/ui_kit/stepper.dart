@@ -61,8 +61,8 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                   Positioned(
                     left: 5.0, // (18 bullet width - 3 line width) / 2
                     top: widget.useDashedLine
-                        ? 18
-                        : 23, // directly below this item's bullet
+                        ? 20
+                        : 25, // directly below this item's bullet
                     bottom: widget.useDashedLine
                         ? -18
                         : -23, // extends through this item's bottom spacing
@@ -93,14 +93,40 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                     Column(
                       children: [
                         SizedBox(height: 13),
-                        Container(
-                          height: 12,
-                          width: 12,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: item.isDone ? Colors.green : U.Theme.primary,
-                          ),
-                        ),
+                        item.isDone
+                            ? Container(
+                                height: 13,
+                                width: 13,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.green,
+                                ),
+                              )
+                            : Container(
+                                height: 14,
+                                width: 14,
+
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: U.Theme.primary),
+                                  shape: BoxShape.circle,
+                                  color: item.inProgress
+                                      ? U.Theme.primary
+                                      : U.Theme.white,
+                                ),
+
+                                child: Center(
+                                  child: Container(
+                                    height: 6,
+                                    width: 6,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: item.inProgress
+                                          ? U.Theme.white
+                                          : U.Theme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
 
@@ -110,6 +136,22 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          item.subTitle != null
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      U.Text(
+                                        text: item.subTitle!,
+                                        color: U.Theme.primary,
+                                      ),
+                                      SizedBox(height: 6),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
                           InkWell(
                             borderRadius: BorderRadius.circular(8),
                             onTap: item.isDisabled
@@ -148,8 +190,13 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                                   AnimatedRotation(
                                     duration: const Duration(milliseconds: 200),
                                     turns: isExpanded ? 0.5 : 0,
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.keyboard_arrow_down,
+                                      color: item.isDisabled
+                                          ? U.Theme.secondaryButton.withValues(
+                                              alpha: 0.4,
+                                            )
+                                          : U.Theme.secondaryButton,
                                     ),
                                   ),
                                 ],
@@ -158,35 +205,68 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                           ),
 
                           ClipRect(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: AnimatedSize(
-                                duration: const Duration(milliseconds: 250),
-                                curve: Curves.easeInOut,
-                                alignment: Alignment.topCenter,
-                                child: isExpanded
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: U.Theme.white.withValues(
-                                            alpha: 0.5,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            15,
-                                          ),
-                                          border: Border.all(
-                                            color: Colors.grey.withValues(
-                                              alpha: 0.6,
+                            child: AnimatedSize(
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeInOut,
+                              alignment: Alignment.topCenter,
+                              child: isExpanded
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color:item.itemBackground,
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                // border: Border.all(
+                                                //   color: U.Theme.primary.withValues(
+                                                //     alpha: 0.6,
+                                                //   ),
+                                                //   width: 0.8,
+                                                // ),
+                                              ),
+                                              padding: const EdgeInsets.all(8),
+                                              child: item.child,
                                             ),
-                                            width: 0.8,
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: item.child,
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ),
+                                          item.onTap != null
+                                              ? Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    const SizedBox(width: 12),
+
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: U.Theme.divider
+                                                            .withValues(
+                                                              alpha: 0.6,
+                                                            ),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              50,
+                                                            ),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            4,
+                                                          ),
+                                                      child: const Icon(
+                                                        Icons.arrow_right_sharp,
+                                                        size: 21,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
                             ),
                           ),
                         ],
@@ -206,14 +286,22 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
 class StepperItem {
   final bool isDisabled;
   final bool isDone;
+  final bool inProgress;
   final String title;
+  final String? subTitle;
   final Widget child;
+  final Color? itemBackground;
+  final Function()? onTap;
 
   StepperItem({
     this.isDisabled = false,
+    this.inProgress = false,
     required this.isDone,
     required this.title,
+    this.subTitle,
+    this.itemBackground,
     required this.child,
+    this.onTap,
   });
 }
 

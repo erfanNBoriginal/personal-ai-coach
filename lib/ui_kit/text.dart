@@ -9,13 +9,14 @@ class Text extends M.StatelessWidget {
   final M.Color? color;
   final TextWeight? textWeight;
   final TextSize? textSize;
-
+  final bool isCentered;
   const Text({
     super.key,
     required this.text,
     this.color,
     this.textSize = TextSize.s12,
     this.textWeight = TextWeight.md,
+    this.isCentered = false,
   });
   // ignore: unused_element
   M.FontWeight get _getWeight {
@@ -56,6 +57,7 @@ class Text extends M.StatelessWidget {
   M.Widget build(M.BuildContext context) {
     return M.Text(
       text,
+      textAlign:isCentered ? M.TextAlign.center : null,
       style: M.TextStyle(
         fontWeight: _getWeight,
         fontSize: _getSize,
