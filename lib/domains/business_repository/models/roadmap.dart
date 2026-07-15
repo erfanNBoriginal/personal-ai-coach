@@ -29,6 +29,17 @@ class Roadmap {
       ).map((e) => Milestone.fromMap(e)).toList(),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type,
+      'goal': goal,
+      'summary': summary,
+      'totalDurationWeeks': totalDurationWeeks,
+      'difficultyProgression': difficultyProgression,
+      'milestones': milestones.map((e) => e.toMap()).toList(),
+    };
+  }
 }
 
 class Milestone {
@@ -68,6 +79,19 @@ class Milestone {
       ),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'order': order,
+      'title': title,
+      'description': description,
+      'startWeek': startWeek,
+      'endWeek': endWeek,
+      'weeklyObjectives': weeklyObjectives.map((e) => e.toMap()).toList(),
+      'checkpoint': checkpoint.toMap(),
+    };
+  }
 }
 
 class WeeklyObjective {
@@ -88,6 +112,10 @@ class WeeklyObjective {
       outcome: map['outcome'] ?? '',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {'week': week, 'focus': focus, 'outcome': outcome};
+  }
 }
 
 class Checkpoint {
@@ -103,5 +131,9 @@ class Checkpoint {
       title: map['title'] ?? '',
       criteria: map['criteria'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'title': title, 'criteria': criteria};
   }
 }

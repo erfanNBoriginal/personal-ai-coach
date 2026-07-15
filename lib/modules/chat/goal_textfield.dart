@@ -50,9 +50,13 @@ class GoalTextfield extends StatelessWidget {
                         final res = await context
                             .read<ChatCubit>()
                             .onRoadmapGenrated();
-                        GoRouter.of(
-                          context,
-                        ).pushNamed(RoadmapPage.route, extra: res);
+                        GoRouter.of(context).pushNamed(
+                          RoadmapPage.route,
+                          extra: {
+                            'goal': context.read<ChatCubit>().state.goal,
+                            'roadMap': res,
+                          },
+                        );
                       },
                       // async {
                       //   final res = await context

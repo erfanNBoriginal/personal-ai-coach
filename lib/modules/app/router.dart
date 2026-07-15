@@ -30,8 +30,13 @@ final router = GoRouter(
             GoRoute(
               path: RoadmapPage.route,
               name: RoadmapPage.route,
-              builder: (context, state) =>
-                  RoadmapPage(roadMap: state.extra as dynamic),
+              builder: (context, state) {
+                final extra = state.extra as Map<String, dynamic>;
+                return RoadmapPage(
+                  goal: extra['goal'] as String?,
+                  roadMap: extra['roadMap'] as dynamic,
+                );
+              },
             ),
           ],
         ),

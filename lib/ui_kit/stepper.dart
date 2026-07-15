@@ -28,257 +28,290 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSlide(
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeInOut,
-      offset: hasExpandedItem && widget.isMoveable
-          ? const Offset(-0.08, 0)
-          : Offset.zero,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: widget.items.length,
-        shrinkWrap: widget.shrinkWrap,
-        primary: false,
-        physics:
-            widget.physics ??
-            (widget.shrinkWrap
-                ? const NeverScrollableScrollPhysics()
-                : const BouncingScrollPhysics()),
-        itemBuilder: (context, index) {
-          final item = widget.items[index];
-          final isExpanded = expandedIndex == index;
+     final shouldMove = hasExpandedItem && widget.isMoveable;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const expansion = 0.08;
+        return TweenAnimationBuilder<double>(
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+          tween: Tween<double>(end: shouldMove ? 1.0 : 0.0),
+          builder: (context, value, child) {
+            final shift = constraints.maxWidth * expansion * value;
+            return Transform.translate(
+              offset: Offset(0, 0),
+              child: FractionallySizedBox(
+                alignment: Alignment.topRight,
+                widthFactor: 1 + (expansion * value),
+                child: child,
+              ),
+            );
+          },
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: widget.items.length,
+            shrinkWrap: widget.shrinkWrap,
+            primary: false,
+            physics:
+                widget.physics ??
+                (widget.shrinkWrap
+                    ? const NeverScrollableScrollPhysics()
+                    : const BouncingScrollPhysics()),
+            itemBuilder: (context, index) {
+              final item = widget.items[index];
+              final isExpanded = expandedIndex == index;
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Dynamic connector.
-                //
-                // Its height is based on the real height of the Row/step content.
-                // It begins below this bullet and reaches the next bullet.
-                if (index != widget.items.length - 1)
-                  Positioned(
-                    left: 5.0, // (18 bullet width - 3 line width) / 2
-                    top: widget.useDashedLine
-                        ? 20
-                        : 25, // directly below this item's bullet
-                    bottom: widget.useDashedLine
-                        ? -18
-                        : -23, // extends through this item's bottom spacing
-                    child: widget.useDashedLine
-                        ? SizedBox(
-                            width: 3,
-                            child: VerticalDashedLine(
-                              color: U.Theme.divider,
-                              width: 3,
-                              dashHeight: 6,
-                              dashSpacing: 4,
-                              radius: 12,
-                            ),
-                          )
-                        : Container(
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            width: 3,
-                            decoration: BoxDecoration(
-                              color: U.Theme.divider,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                  ),
-
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    Column(
-                      children: [
-                        SizedBox(height: 13),
-                        item.isDone
-                            ? Container(
-                                height: 13,
-                                width: 13,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.green,
+                    // Dynamic connector.
+                    //
+                    // Its height is based on the real height of the Row/step content.
+                    // It begins below this bullet and reaches the next bullet.
+                    if (index != widget.items.length - 1)
+                      Positioned(
+                        left: 5.0, // (18 bullet width - 3 line width) / 2
+                        top: widget.useDashedLine
+                            ? 20
+                            : 25, // directly below this item's bullet
+                        bottom: widget.useDashedLine
+                            ? -18
+                            : -23, // extends through this item's bottom spacing
+                        child: widget.useDashedLine
+                            ? SizedBox(
+                                width: 3,
+                                child: VerticalDashedLine(
+                                  color: U.Theme.divider,
+                                  width: 3,
+                                  dashHeight: 6,
+                                  dashSpacing: 4,
+                                  radius: 12,
                                 ),
                               )
                             : Container(
-                                height: 14,
-                                width: 14,
-
+                                margin: EdgeInsets.symmetric(vertical: 4),
+                                width: 3,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: U.Theme.primary),
-                                  shape: BoxShape.circle,
-                                  color: item.inProgress
-                                      ? U.Theme.primary
-                                      : U.Theme.white,
+                                  color: U.Theme.divider,
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
+                              ),
+                      ),
 
-                                child: Center(
-                                  child: Container(
-                                    height: 6,
-                                    width: 6,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(height: 13),
+                            item.isDone
+                                ? Container(
+                                    height: 13,
+                                    width: 13,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: item.inProgress
-                                          ? U.Theme.white
-                                          : U.Theme.primary,
+                                      color: Colors.green,
                                     ),
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
+                                  )
+                                : Container(
+                                    height: 14,
+                                    width: 14,
 
-                    const SizedBox(width: 8),
-
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          item.subTitle != null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4.0,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      U.Text(
-                                        text: item.subTitle!,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
                                         color: U.Theme.primary,
                                       ),
-                                      SizedBox(height: 6),
-                                    ],
-                                  ),
-                                )
-                              : SizedBox(),
-                          InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: item.isDisabled
-                                ? null
-                                : () {
-                                    setState(() {
-                                      expandedIndex = isExpanded ? null : index;
-                                    });
-                                  },
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: item.isDisabled
-                                    ? U.Theme.onBackground.withValues(
-                                        alpha: 0.3,
-                                      )
-                                    : U.Theme.onBackground.withValues(
-                                        alpha: 0.6,
+                                      shape: BoxShape.circle,
+                                      color: item.inProgress
+                                          ? U.Theme.primary
+                                          : U.Theme.white,
+                                    ),
+
+                                    child: Center(
+                                      child: Container(
+                                        height: 6,
+                                        width: 6,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: item.inProgress
+                                              ? U.Theme.white
+                                              : U.Theme.primary,
+                                        ),
                                       ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: U.Text(
-                                      text: item.title,
-                                      color: item.isDisabled
-                                          ? U.Theme.primaryText.withValues(
-                                              alpha: 0.4,
-                                            )
-                                          : U.Theme.primaryText,
-                                      textSize: U.TextSize.s16,
-                                      textWeight: U.TextWeight.semiBold,
                                     ),
                                   ),
-                                  AnimatedRotation(
-                                    duration: const Duration(milliseconds: 200),
-                                    turns: isExpanded ? 0.5 : 0,
-                                    child: Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: item.isDisabled
-                                          ? U.Theme.secondaryButton.withValues(
-                                              alpha: 0.4,
-                                            )
-                                          : U.Theme.secondaryButton,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          ],
+                        ),
 
-                          ClipRect(
-                            child: AnimatedSize(
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeInOut,
-                              alignment: Alignment.topCenter,
-                              child: isExpanded
+                        const SizedBox(width: 8),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              item.subTitle != null
                                   ? Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 4.0,
+                                      ),
+                                      child: Column(
                                         children: [
-                                          Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color:item.itemBackground,
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                // border: Border.all(
-                                                //   color: U.Theme.primary.withValues(
-                                                //     alpha: 0.6,
-                                                //   ),
-                                                //   width: 0.8,
-                                                // ),
-                                              ),
-                                              padding: const EdgeInsets.all(8),
-                                              child: item.child,
-                                            ),
+                                          U.Text(
+                                            text: item.subTitle!,
+                                            color: U.Theme.primary,
                                           ),
-                                          item.onTap != null
-                                              ? Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    const SizedBox(width: 12),
-
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        color: U.Theme.divider
-                                                            .withValues(
-                                                              alpha: 0.6,
-                                                            ),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              50,
-                                                            ),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                            4,
-                                                          ),
-                                                      child: const Icon(
-                                                        Icons.arrow_right_sharp,
-                                                        size: 21,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : SizedBox(),
+                                          SizedBox(height: 6),
                                         ],
                                       ),
                                     )
-                                  : const SizedBox.shrink(),
-                            ),
+                                  : SizedBox(),
+                              InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                onTap: item.isDisabled
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          expandedIndex = isExpanded
+                                              ? null
+                                              : index;
+                                        });
+                                      },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: item.isDisabled
+                                        ? U.Theme.onBackground.withValues(
+                                            alpha: 0.3,
+                                          )
+                                        : U.Theme.onBackground.withValues(
+                                            alpha: 0.6,
+                                          ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: U.Text(
+                                          text: item.title,
+                                          color: item.isDisabled
+                                              ? U.Theme.primaryText.withValues(
+                                                  alpha: 0.4,
+                                                )
+                                              : U.Theme.primaryText,
+                                          textSize: U.TextSize.s16,
+                                          textWeight: U.TextWeight.semiBold,
+                                        ),
+                                      ),
+                                      AnimatedRotation(
+                                        duration: const Duration(
+                                          milliseconds: 200,
+                                        ),
+                                        turns: isExpanded ? 0.5 : 0,
+                                        child: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: item.isDisabled
+                                              ? U.Theme.secondaryButton
+                                                    .withValues(alpha: 0.4)
+                                              : U.Theme.secondaryButton,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              ClipRect(
+                                child: AnimatedSize(
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeInOut,
+                                  alignment: Alignment.topCenter,
+                                  child: isExpanded
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: item.itemBackground,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          15,
+                                                        ),
+                                                    // border: Border.all(
+                                                    // color: Colors.grey.withValues(
+                                                    // alpha: 0.6,
+                                                    // ),
+                                                    // width: 0.8,
+                                                    // ),
+                                                  ),
+                                                  padding: const EdgeInsets.all(
+                                                    8,
+                                                  ),
+                                                  child: item.child,
+                                                ),
+                                              ),
+                                              item.onTap != null
+                                                  ? Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 12,
+                                                        ),
+
+                                                        GestureDetector(
+                                                          onTap: item.onTap,
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                              color: U
+                                                                  .Theme
+                                                                  .divider
+                                                                  .withValues(
+                                                                    alpha: 0.6,
+                                                                  ),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    50,
+                                                                  ),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets.all(
+                                                                  4,
+                                                                ),
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .arrow_right_sharp,
+                                                              size: 21,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : SizedBox(),
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
