@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' as M;
+import 'package:flutter/widgets.dart';
 
 enum TextWeight { sm, md, bold, semiBold }
 
@@ -10,6 +11,8 @@ class Text extends M.StatelessWidget {
   final TextWeight? textWeight;
   final TextSize? textSize;
   final bool isCentered;
+  final TextOverflow overFlow;
+  final bool softWrap;
   const Text({
     super.key,
     required this.text,
@@ -17,6 +20,8 @@ class Text extends M.StatelessWidget {
     this.textSize = TextSize.s12,
     this.textWeight = TextWeight.md,
     this.isCentered = false,
+    this.softWrap = false,
+    this.overFlow = TextOverflow.clip,
   });
   // ignore: unused_element
   M.FontWeight get _getWeight {
@@ -57,6 +62,8 @@ class Text extends M.StatelessWidget {
   M.Widget build(M.BuildContext context) {
     return M.Text(
       text,
+      softWrap: softWrap,
+      overflow: overFlow,
       textAlign:isCentered ? M.TextAlign.center : null,
       style: M.TextStyle(
         fontWeight: _getWeight,

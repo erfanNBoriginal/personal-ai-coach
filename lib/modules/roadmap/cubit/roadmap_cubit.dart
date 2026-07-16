@@ -32,6 +32,19 @@ class RoadmapCubit extends Cubit<RoadmapState> {
     emit(state.copyWith(loading: false, weeklyTasks: weeklyTasks));
   }
 
+  List<int> ids = [];
+  void onExpandedCountChanged(int stepperId, bool shouldExpand) {
+    if (!ids.contains(stepperId)) {
+      emit(state.copyWith(count: state.count + 1));
+      ids.add(stepperId);
+    } else {
+      if (shouldExpand) {
+        emit(state.copyWith(count: state.count - 1));
+        ids.remove(stepperId);
+      }
+    }
+  }
+
   void onInit() {
     emit(state.copyWith(roadmap: initialRoadmap, goal: initialGoal));
   }

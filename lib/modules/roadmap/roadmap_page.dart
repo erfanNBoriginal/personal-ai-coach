@@ -58,6 +58,11 @@ class RoadmapPage extends StatelessWidget {
                   ),
                 ),
                 U.Stepper(
+                  id: 1,
+                  count: state.count,
+                  onExapndedCountChanged: context
+                      .read<RoadmapCubit>()
+                      .onExpandedCountChanged,
                   isMoveable: true,
                   useDashedLine: true,
                   items: [
@@ -73,7 +78,13 @@ class RoadmapPage extends StatelessWidget {
                           isDone: false,
                           title: item.title,
                           child: U.Stepper(
-                            isMoveable: true,
+                            id: 2,
+
+                            // count: state.count,
+                            onExapndedCountChanged: context
+                                .read<RoadmapCubit>()
+                                .onExpandedCountChanged,
+                            // isMoveable: true,
                             items: [
                               ...item.weeklyObjectives.expand(
                                 (e) => [
@@ -86,10 +97,10 @@ class RoadmapPage extends StatelessWidget {
                                     isDone: e.week == 1,
                                     title: e.focus,
                                     onTap: () {
-                                      print('heyyyyyyyyyyyyyyyy');
-                                      print(
-                                        'currentMilestone: ${item.toMap()} currentWeek: ${e.week.toString()} ',
-                                      );
+                                      // print('heyyyyyyyyyyyyyyyy');
+                                      // print(
+                                      //   'currentMilestone: ${item.toMap()} currentWeek: ${e.week.toString()} ',
+                                      // );
                                       context
                                           .read<RoadmapCubit>()
                                           .onWeeklyTasksCreated(
@@ -119,7 +130,14 @@ class RoadmapPage extends StatelessWidget {
                                               state.weeklyTasks?.weekNumber ==
                                                       e.week
                                                   ? U.Stepper(
-                                                    isMoveable: true,
+                                                      id: 3,
+                                                      onExapndedCountChanged:
+                                                          context
+                                                              .read<
+                                                                RoadmapCubit
+                                                              >()
+                                                              .onExpandedCountChanged,
+                                                      isMoveable: true,
                                                       items: [
                                                         ...state
                                                             .weeklyTasks!
@@ -154,7 +172,6 @@ class RoadmapPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                   
                   ],
                 ),
                 SizedBox(height: 121),
