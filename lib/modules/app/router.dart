@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/modules/chat/chat_page.dart';
 import 'package:personal_ai_coach/modules/home/home.dart';
 import 'package:personal_ai_coach/modules/roadmap/roadmap_page.dart';
+import 'package:personal_ai_coach/modules/task/task_page.dart';
 
 final rootNavKey = GlobalKey<NavigatorState>();
 
@@ -35,6 +36,16 @@ final router = GoRouter(
                 return RoadmapPage(
                   goal: extra['goal'] as String?,
                   roadMap: extra['roadMap'] as dynamic,
+                );
+              },
+            ),
+            GoRoute(
+              path: TaskDetailPage.route,
+              name: TaskDetailPage.route,
+              builder: (context, state) {
+                final extra = state.extra as Map<String, dynamic>;
+                return TaskDetailPage(milestoneTitle: extra['milestone'] as String,
+                initialTask: extra['task'] as dynamic,
                 );
               },
             ),

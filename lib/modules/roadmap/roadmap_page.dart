@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
 import 'package:personal_ai_coach/modules/roadmap/cubit/roadmap_cubit.dart';
+import 'package:personal_ai_coach/modules/task/task_page.dart';
 import 'package:personal_ai_coach/ui_kit/stepper.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
@@ -63,7 +65,7 @@ class RoadmapPage extends StatelessWidget {
                   onExapndedCountChanged: context
                       .read<RoadmapCubit>()
                       .onExpandedCountChanged,
-                  isMoveable: true,
+                  // isMoveable: true,
                   useDashedLine: true,
                   items: [
                     ...state.roadmap!.milestones.expand(
@@ -91,8 +93,8 @@ class RoadmapPage extends StatelessWidget {
                                   StepperItem(
                                     loading: state.loading,
 
-                                    itemBackground: U.Theme.divider.withValues(
-                                      alpha: 0.23,
+                                    itemBackground: U.Theme.white.withValues(
+                                      alpha: 0.33,
                                     ),
                                     subTitle: "week: ${e.week.toString()}",
                                     inProgress: e.week == 2,
@@ -142,22 +144,106 @@ class RoadmapPage extends StatelessWidget {
                                                               .onExpandedCountChanged,
                                                       isMoveable: true,
                                                       items: [
-                                                        ...state
-                                                            .weeklyTasks!
-                                                            .days
-                                                            .map(
-                                                              (
-                                                                e,
-                                                              ) => StepperItem(
-                                                                isDone: false,
-                                                                title: e.date,
-                                                                child: U.Text(
-                                                                  text: e
-                                                                      .primaryTask
-                                                                      .description,
+                                                        ...state.weeklyTasks!.days.map(
+                                                          (e) => StepperItem(
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            isDone: false,
+                                                            title: e.date,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Flexible(
+                                                                  child: Container(
+                                                                    decoration: BoxDecoration(
+                                                                      color: U
+                                                                          .Theme
+                                                                          .background
+                                                                          .withValues(
+                                                                            alpha:
+                                                                                0.7,
+                                                                          ),
+                                                                      border: Border.all(
+                                                                        width:
+                                                                            0.7,
+                                                                        color: U
+                                                                            .Theme
+                                                                            .primaryBorder
+                                                                            .withValues(
+                                                                              alpha: 0.6,
+                                                                            ),
+                                                                      ),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            12,
+                                                                          ),
+                                                                    ),
+                                                                    child: Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                            8.0,
+                                                                          ),
+                                                                      child: U.Text(
+                                                                        softWrap:
+                                                                            true,
+                                                                        color: U
+                                                                            .Theme
+                                                                            .primaryText,
+                                                                        text: e
+                                                                            .primaryTask
+                                                                            .description,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    GoRouter.of(
+                                                                      context,
+                                                                    ).pushNamed(
+                                                                      TaskDetailPage
+                                                                          .route,
+                                                                      extra: {
+                                                                        'milestone':
+                                                                            item.title,
+                                                                     'task' : e
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child: Container(
+                                                                    decoration: BoxDecoration(
+                                                                      color: U
+                                                                          .Theme
+                                                                          .divider
+                                                                          .withValues(
+                                                                            alpha:
+                                                                                0.6,
+                                                                          ),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            50,
+                                                                          ),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                          4,
+                                                                        ),
+                                                                    child: const Icon(
+                                                                      Icons
+                                                                          .arrow_right_sharp,
+                                                                      size: 21,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
+                                                          ),
+                                                        ),
                                                       ],
                                                     )
                                                   : SizedBox(),

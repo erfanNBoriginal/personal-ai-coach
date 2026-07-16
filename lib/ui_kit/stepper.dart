@@ -56,7 +56,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
           curve: Curves.easeInOut,
           tween: Tween<double>(end: shouldMove ? widget.count.toDouble() : 0.0),
           builder: (context, value, child) {
-            final shift = constraints.maxWidth * expansion * value;
+            // final shift = constraints.maxWidth * expansion * value;
             return Transform.translate(
               offset: Offset(0, 0),
               child: FractionallySizedBox(
@@ -164,7 +164,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                           ],
                         ),
 
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 12),
 
                         Expanded(
                           child: Column(
@@ -251,7 +251,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
 
                               ClipRect(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 16.0),
+                                  padding: item.padding,
                                   child: AnimatedSize(
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.easeInOut,
@@ -371,6 +371,7 @@ class StepperItem {
   final bool isDone;
   final bool inProgress;
   final bool loading;
+  final EdgeInsetsGeometry padding;
   final String title;
   final String? subTitle;
   final Widget child;
@@ -381,6 +382,7 @@ class StepperItem {
     this.isDisabled = false,
     this.inProgress = false,
     this.loading = false,
+    this.padding = const EdgeInsets.only(left: 16.0),
     required this.isDone,
     required this.title,
     this.subTitle,
