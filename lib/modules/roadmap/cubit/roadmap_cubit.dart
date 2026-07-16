@@ -35,12 +35,17 @@ class RoadmapCubit extends Cubit<RoadmapState> {
   List<int> ids = [];
   void onExpandedCountChanged(int stepperId, bool shouldExpand) {
     if (!ids.contains(stepperId)) {
-      emit(state.copyWith(count: state.count + 1));
       ids.add(stepperId);
+      final index = ids.indexWhere((element) => element == stepperId) + 1;
+      emit(state.copyWith(count: index));
+      // print('state.count - (ids.length - index)');
+      // print(ids.toString());
+      // print('length: ${ids.length} vs index: $index vs count: ${state.count} ');
     } else {
       if (shouldExpand) {
-        emit(state.copyWith(count: state.count - 1));
-        ids.remove(stepperId);
+        final index = ids.indexWhere((element) => element == stepperId);
+        emit(state.copyWith(count: index));
+        ids.removeRange(index, ids.length);
       }
     }
   }

@@ -89,6 +89,8 @@ class RoadmapPage extends StatelessWidget {
                               ...item.weeklyObjectives.expand(
                                 (e) => [
                                   StepperItem(
+                                    loading: state.loading,
+
                                     itemBackground: U.Theme.divider.withValues(
                                       alpha: 0.23,
                                     ),
@@ -120,17 +122,18 @@ class RoadmapPage extends StatelessWidget {
                                               // ),
                                               // SizedBox(height: 5),
                                               U.Text(text: e.outcome),
-                                              if (state.loading)
-                                                Column(
-                                                  children: [
-                                                    SizedBox(height: 5),
-                                                    CircularProgressIndicator(),
-                                                  ],
-                                                ),
+                                              // if (state.loading)
+                                              //   Column(
+                                              //     children: [
+                                              //       SizedBox(height: 5),
+                                              //       CircularProgressIndicator(),
+                                              //     ],
+                                              //   ),
                                               state.weeklyTasks?.weekNumber ==
                                                       e.week
                                                   ? U.Stepper(
                                                       id: 3,
+
                                                       onExapndedCountChanged:
                                                           context
                                                               .read<

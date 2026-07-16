@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class Stepper extends StatefulWidget {
@@ -258,67 +259,86 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                                     child: isExpanded
                                         ? Padding(
                                             padding: const EdgeInsets.all(8),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                            child: Column(
                                               children: [
-                                                Expanded(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          item.itemBackground,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            15,
-                                                          ),
-                                                      // border: Border.all(
-                                                      // color: Colors.grey.withValues(
-                                                      // alpha: 0.6,
-                                                      // ),
-                                                      // width: 0.8,
-                                                      // ),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(8),
-                                                    child: item.child,
-                                                  ),
-                                                ),
-                                                item.onTap != null
-                                                    ? Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          const SizedBox(
-                                                            width: 12,
-                                                          ),
-
-                                                          GestureDetector(
-                                                            onTap: item.onTap,
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
-                                                                color: U
-                                                                    .Theme
-                                                                    .divider
-                                                                    .withValues(
-                                                                      alpha:
-                                                                          0.6,
-                                                                    ),
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      50,
-                                                                    ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: item
+                                                              .itemBackground,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                15,
                                                               ),
-                                                              padding:
-                                                                  const EdgeInsets.all(
-                                                                    4,
-                                                                  ),
-                                                              child: const Icon(
-                                                                Icons
-                                                                    .arrow_right_sharp,
-                                                                size: 21,
-                                                              ),
+                                                          // border: Border.all(
+                                                          // color: Colors.grey.withValues(
+                                                          // alpha: 0.6,
+                                                          // ),
+                                                          // width: 0.8,
+                                                          // ),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              8,
                                                             ),
+                                                        child: item.child,
+                                                      ),
+                                                    ),
+                                                    item.onTap != null
+                                                        ? Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 12,
+                                                              ),
+
+                                                              GestureDetector(
+                                                                onTap:
+                                                                    item.onTap,
+                                                                child: Container(
+                                                                  decoration: BoxDecoration(
+                                                                    color: U
+                                                                        .Theme
+                                                                        .divider
+                                                                        .withValues(
+                                                                          alpha:
+                                                                              0.6,
+                                                                        ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          50,
+                                                                        ),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets.all(
+                                                                        4,
+                                                                      ),
+                                                                  child: const Icon(
+                                                                    Icons
+                                                                        .arrow_right_sharp,
+                                                                    size: 21,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        : SizedBox(),
+                                                  ],
+                                                ),
+                                                item.loading
+                                                    ? Column(
+                                                        children: [
+                                                          SizedBox(height: 7),
+                                                          LoadingAnimationWidget.fourRotatingDots(
+                                                            color:
+                                                                U.Theme.primary,
+                                                            size: 20,
                                                           ),
                                                         ],
                                                       )
@@ -350,6 +370,7 @@ class StepperItem {
   final bool isDisabled;
   final bool isDone;
   final bool inProgress;
+  final bool loading;
   final String title;
   final String? subTitle;
   final Widget child;
@@ -359,6 +380,7 @@ class StepperItem {
   StepperItem({
     this.isDisabled = false,
     this.inProgress = false,
+    this.loading = false,
     required this.isDone,
     required this.title,
     this.subTitle,
