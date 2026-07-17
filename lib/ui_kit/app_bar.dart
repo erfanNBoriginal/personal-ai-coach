@@ -4,16 +4,33 @@ import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class AppBar extends StatelessWidget {
   final String title;
-
-  const AppBar({super.key, required this.title});
+  final bool blur;
+  const AppBar({super.key, required this.title, this.blur = false});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 27.0),
-      child: Container(
-        height: 77,
-        color: U.Theme.background.withValues(alpha: 0.0),
+    return Container(
+      height: 77,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: AlignmentGeometry.topCenter,
+          end: AlignmentGeometry.bottomCenter,
+          colors: blur
+              ? [
+                  Color(0xFFF8F8F8).withValues(alpha:1.0),
+                  Color(0xFFF8F8F8).withValues(alpha:1.0),
+                  Color(0xFFF8F8F8).withValues(alpha:1.0),
+                  Color(0xFFF8F8F8).withValues(alpha: 0.9),
+                  Color(0xFFF8F8F8).withValues(alpha: 0.6),
+                  Color(0xFFF8F8F8).withValues(alpha: 0.0),
+                // Colors.black,
+                ]
+              : [],
+        ),
+      ),
+      color: blur ? null : U.Theme.background.withValues(alpha: 1.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 27.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -23,7 +40,11 @@ class AppBar extends StatelessWidget {
               },
               child: U.Image(path: U.Icons.back, width: 28, height: 14),
             ),
-            U.Text(text: title,textSize: U.TextSize.s18,textWeight: U.TextWeight.bold,),
+            U.Text(
+              text: title,
+              textSize: U.TextSize.s18,
+              textWeight: U.TextWeight.bold,
+            ),
             InkWell(
               onTap: () {},
               child: U.Image.icon(path: U.Icons.wrong, size: 14),

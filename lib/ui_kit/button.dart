@@ -20,7 +20,7 @@ class Button extends StatelessWidget {
     super.key,
     required this.title,
     required this.onTap,
-    required this.buttonColor,
+    this.buttonColor = ButtonColor.primary,
     this.buttonText = ButtonText.primary,
     // this.fontWeight,
     this.trailing,
@@ -78,6 +78,7 @@ class Button extends StatelessWidget {
               if (leading != null) ...[SizedBox(width: 9.2), leading!],
               U.Text(
                 text: title,
+                color: U.Theme.white,
                 textSize: getSize,
                 textWeight: leading != null || trailing != null
                     ? U.TextWeight.md

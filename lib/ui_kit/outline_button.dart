@@ -97,11 +97,14 @@ class OutlineButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (leading != null) ...[SizedBox(width: 15), leading!],
-                U.Text(
-                  text: title,
-                  color: _color.text,
-                  textSize: _color.size,
-                  textWeight: _color.weight,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: U.Text(
+                    text: title,
+                    color: _color.text,
+                    textSize: _color.size,
+                    textWeight: _color.weight,
+                  ),
                 ),
               ],
             ),
