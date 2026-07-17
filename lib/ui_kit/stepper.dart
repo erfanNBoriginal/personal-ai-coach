@@ -294,9 +294,9 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
                                                                 CrossAxisAlignment
                                                                     .center,
                                                             children: [
-                                                              const SizedBox(
-                                                                width: 12,
-                                                              ),
+                                                              // const SizedBox(
+                                                              //   width: 12,
+                                                              // ),
 
                                                               GestureDetector(
                                                                 onTap:

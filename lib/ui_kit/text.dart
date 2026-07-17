@@ -21,7 +21,7 @@ class Text extends M.StatelessWidget {
     this.textWeight = TextWeight.md,
     this.isCentered = false,
     this.softWrap = false,
-    this.overFlow = TextOverflow.clip,
+    this.overFlow = TextOverflow.ellipsis,
   });
   // ignore: unused_element
   M.FontWeight get _getWeight {

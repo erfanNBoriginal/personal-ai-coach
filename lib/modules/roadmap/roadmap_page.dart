@@ -65,7 +65,7 @@ class RoadmapPage extends StatelessWidget {
                   onExapndedCountChanged: context
                       .read<RoadmapCubit>()
                       .onExpandedCountChanged,
-                  // isMoveable: true,
+                  isMoveable: true,
                   useDashedLine: true,
                   items: [
                     ...state.roadmap!.milestones.expand(
@@ -151,11 +151,11 @@ class RoadmapPage extends StatelessWidget {
                                                             isDone: false,
                                                             title: e.date,
                                                             child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
+                                                              // mainAxisAlignment:
+                                                              //     MainAxisAlignment
+                                                              //         .spaceBetween,
                                                               children: [
-                                                                Flexible(
+                                                                Expanded(
                                                                   child: Container(
                                                                     decoration: BoxDecoration(
                                                                       color: U
