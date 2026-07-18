@@ -9,13 +9,13 @@ class DailySchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      // shrinkWrap: false,
+      shrinkWrap: true,
        physics: const NeverScrollableScrollPhysics(),
       // mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(height: 55),
         ...tasks.expand((e) => [TaskCard(task: e), SizedBox(height: 12)]),
-        SizedBox(height: 221),
+        SizedBox(height: 21),
         // Expanded(
         //   child: ListView.separated(
         //     itemBuilder: (context, index) {

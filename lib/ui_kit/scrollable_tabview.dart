@@ -14,12 +14,20 @@ class ScrollableTabview extends StatefulWidget {
   State<ScrollableTabview> createState() => _ScrollableTabviewState();
 }
 
-enum _SyncSource { tabs, pages }
+enum _SyncSource {
+  tabs,
+  pages,
+}
 
 class _ScrollableTabviewState extends State<ScrollableTabview> {
   final ScrollController _tabController = ScrollController();
   final PageController _pageController = PageController();
+// 0.5 means change at halfway.
+  // 0.7 means user must drag 70% toward the next item before changing.
+  // Increase it for less sensitivity, e.g. 0.8.
+  static const double _pageChangeThreshold = 0.70;
 
+  static const Duration _pageChangeDuration = Duration(milliseconds: 220);
   _SyncSource? _syncSource;
   int _activeIndex = 0;
 
@@ -39,10 +47,9 @@ class _ScrollableTabviewState extends State<ScrollableTabview> {
   void _updateActiveIndex(double progress) {
     if (widget.pages.length <= 1) return;
 
-    final index = (progress * (widget.pages.length - 1)).round().clamp(
-      0,
-      widget.pages.length - 1,
-    );
+    final index = (progress * (widget.pages.length - 1))
+        .round()
+        .clamp(0, widget.pages.length - 1);
 
     if (index != _activeIndex && mounted) {
       setState(() => _activeIndex = index);
@@ -63,30 +70,69 @@ class _ScrollableTabviewState extends State<ScrollableTabview> {
       controller.jumpTo(clampedTarget);
     }
   }
+void _updatePageFromTabScroll() {
+    if (!_tabController.hasClients || !_pageController.hasClients) return;
+    if (widget.pages.length <= 1) return;
 
+    final progress = _progress(_tabController.position);
+
+    final maxIndex = widget.pages.length - 1;
+
+    // Progress distance represented by one page.
+    //
+    // Example with 4 pages:
+    // page 0 = 0.0
+    // page 1 = 0.333
+    // page 2 = 0.666
+    // page 3 = 1.0
+    final onePageProgress = 1 / maxIndex;
+
+    // Where the currently active page sits in the tab-list progress.
+    final activePageProgress = _activeIndex * onePageProgress;
+
+    final difference = progress - activePageProgress;
+
+    int targetIndex = _activeIndex;
+
+    // User is scrolling toward later pages.
+    if (difference >= onePageProgress * _pageChangeThreshold) {
+      final pagesToMove = (difference / onePageProgress).ceil();
+
+      targetIndex = (_activeIndex + pagesToMove).clamp(0, maxIndex);
+    }
+    // User is scrolling back toward earlier pages.
+    else if (difference <= -onePageProgress * _pageChangeThreshold) {
+      final pagesToMove = (difference.abs() / onePageProgress).ceil();
+
+      targetIndex = (_activeIndex - pagesToMove).clamp(0, maxIndex);
+    }
+
+    // Do nothing until the user crosses the threshold.
+    if (targetIndex == _activeIndex) return;
+
+    setState(() => _activeIndex = targetIndex);
+
+    // Animate only once after crossing the threshold.
+    _pageController.animateToPage(
+      targetIndex,
+      duration: _pageChangeDuration,
+      curve: Curves.easeOutCubic,
+    );
+  }
   // User drags the tab ListView -> move the PageView.
-  bool _onTabNotification(ScrollNotification notification) {
+bool _onTabNotification(ScrollNotification notification) {
     if (notification.depth != 0) return false;
 
-    // A real user drag started on the tab list.
     if (notification is ScrollStartNotification &&
         notification.dragDetails != null) {
       _syncSource = _SyncSource.tabs;
     }
 
     if (notification is ScrollUpdateNotification &&
-        _syncSource == _SyncSource.tabs &&
-        _pageController.hasClients) {
-      final progress = _progress(notification.metrics);
-
-      final targetPagePixels =
-          progress * _pageController.position.maxScrollExtent;
-
-      _jumpToIfNeeded(_pageController, targetPagePixels);
-      _updateActiveIndex(progress);
+        _syncSource == _SyncSource.tabs) {
+      _updatePageFromTabScroll();
     }
 
-    // Includes the ListView's fling / ballistic movement.
     if (notification is ScrollEndNotification &&
         _syncSource == _SyncSource.tabs) {
       _syncSource = null;
@@ -149,7 +195,7 @@ class _ScrollableTabviewState extends State<ScrollableTabview> {
     return Column(
       children: [
         Expanded(
-          flex: 22,
+          flex: 12,
           child: NotificationListener<ScrollNotification>(
             onNotification: _onTabNotification,
             child: ListView.separated(

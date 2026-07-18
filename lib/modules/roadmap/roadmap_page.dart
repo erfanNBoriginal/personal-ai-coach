@@ -243,7 +243,7 @@ class RoadmapPage extends StatelessWidget {
                                                                               ),
                                                                               SpecificTasks(
                                                                                 day: e.date,
-                                                                                tasks: state.weeklyTasks!.days,
+                                                                                tasks: [],
                                                                               ),
                                                                             ],
                                                                           );
