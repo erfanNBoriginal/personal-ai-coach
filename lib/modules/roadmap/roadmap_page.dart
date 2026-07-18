@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/weekly_tasks.dart';
 import 'package:personal_ai_coach/modules/roadmap/cubit/roadmap_cubit.dart';
-import 'package:personal_ai_coach/modules/task/task_page.dart';
+import 'package:personal_ai_coach/modules/schedule/schedule_page.dart';
 import 'package:personal_ai_coach/ui_kit/stepper.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
@@ -96,17 +97,18 @@ class RoadmapPage extends StatelessWidget {
                                 // isMoveable: true,
                                 items: [
                                   ...item.weeklyObjectives.expand(
-                                    (e) => [
+                                    (weeklyobjectives) => [
                                       StepperItem(
                                         loading: state.loading,
                                         padding: EdgeInsets.zero,
 
                                         itemBackground: U.Theme.white
                                             .withValues(alpha: 0.93),
-                                        subTitle: "week: ${e.week.toString()}",
-                                        inProgress: e.week == 2,
-                                        isDone: e.week == 1,
-                                        title: e.focus,
+                                        subTitle:
+                                            "week: ${weeklyobjectives.week.toString()}",
+                                        inProgress: weeklyobjectives.week == 2,
+                                        isDone: weeklyobjectives.week == 1,
+                                        title: weeklyobjectives.focus,
                                         onTap: () {
                                           // print('heyyyyyyyyyyyyyyyy');
                                           // print(
@@ -115,7 +117,7 @@ class RoadmapPage extends StatelessWidget {
                                           context
                                               .read<RoadmapCubit>()
                                               .onWeeklyTasksCreated(
-                                                'user goal and state: ${state.goal} currentMilestone: ${item.toMap().toString()} currentWeek: ${e.week.toString()} ',
+                                                'user goal and state: ${state.goal} currentMilestone: ${item.toMap().toString()} currentWeek: ${weeklyobjectives.week.toString()} ',
                                               );
                                         },
                                         child: Padding(
@@ -138,7 +140,8 @@ class RoadmapPage extends StatelessWidget {
                                                             bottom: 10.0,
                                                           ),
                                                       child: U.Text(
-                                                        text: e.outcome,
+                                                        text: weeklyobjectives
+                                                            .outcome,
                                                       ),
                                                     ),
                                                     // if (state.loading)
@@ -151,7 +154,8 @@ class RoadmapPage extends StatelessWidget {
                                                     state
                                                                 .weeklyTasks
                                                                 ?.weekNumber ==
-                                                            e.week
+                                                            weeklyobjectives
+                                                                .week
                                                         ? U.Stepper(
                                                             id: 3,
                                                             primary: false,
@@ -222,12 +226,36 @@ class RoadmapPage extends StatelessWidget {
                                                                           GoRouter.of(
                                                                             context,
                                                                           ).pushNamed(
-                                                                            TaskDetailPage.route,
-                                                                            extra: {
-                                                                              'milestone': item.title,
-                                                                              'task': e,
-                                                                            },
+                                                                            SchedulePage.route,
+                                                                            extra: [
+                                                                              SpecificTasks(
+                                                                                day: '1',
+                                                                                tasks: state.weeklyTasks!.days,
+                                                                              ),
+
+                                                                              SpecificTasks(
+                                                                                day: e.date,
+                                                                                tasks: state.weeklyTasks!.days,
+                                                                              ),
+                                                                              SpecificTasks(
+                                                                                day: e.date,
+                                                                                tasks: state.weeklyTasks!.days,
+                                                                              ),
+                                                                              SpecificTasks(
+                                                                                day: e.date,
+                                                                                tasks: state.weeklyTasks!.days,
+                                                                              ),
+                                                                            ],
                                                                           );
+                                                                          // GoRouter.of(
+                                                                          //   context,
+                                                                          // ).pushNamed(
+                                                                          //   TaskDetailPage.route,
+                                                                          //   extra: {
+                                                                          //     'milestone': item.title,
+                                                                          //     'task': e,
+                                                                          //   },
+                                                                          // );
                                                                         },
                                                                         child: Container(
                                                                           decoration: BoxDecoration(

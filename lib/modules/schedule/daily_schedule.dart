@@ -1,0 +1,195 @@
+import 'package:flutter/material.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
+import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
+
+class DailySchedule extends StatelessWidget {
+  final List<DayTask> tasks;
+  const DailySchedule({super.key, required this.tasks});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      // shrinkWrap: false,
+       physics: const NeverScrollableScrollPhysics(),
+      // mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(height: 55),
+        ...tasks.expand((e) => [TaskCard(task: e), SizedBox(height: 12)]),
+        SizedBox(height: 221),
+        // Expanded(
+        //   child: ListView.separated(
+        //     itemBuilder: (context, index) {
+        //       return TaskCard(task: tasks[index]);
+        //     },
+        //     separatorBuilder: (context, index) => SizedBox(height: 8),
+        //     itemCount: tasks.length,
+        //   ),
+        // ),
+      ],
+    );
+  }
+}
+
+class TaskCard extends StatelessWidget {
+  final DayTask task;
+  const TaskCard({super.key, required this.task});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 10,
+              child: Center(child: U.Text(text: 'text')),
+            ),
+            // const Spacer(flex: 10),
+            Expanded(
+              flex: 70,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: U.Theme.divider,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    U.Text(text: task.primaryTask.title),
+                    const SizedBox(height: 15),
+                    U.Text(text: task.primaryTask.description),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DailyBanner extends StatelessWidget {
+  final String day;
+  final int done;
+
+  const DailyBanner({super.key, required this.day, required this.done});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: 333,
+      // width: double.infinity,
+      color: U.Theme.secondaryButton,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Expanded(
+        child: Column(
+          children: [
+            // const Spacer(flex: 10),
+            U.Text(
+              text: day,
+              textSize: U.TextSize.s18,
+              color: U.Theme.primaryText,
+            ),
+
+            // const Spacer(flex: 20),
+            TaskProgressCard(progress: 0.5),
+
+            // const Spacer(flex: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TaskProgressCard extends StatefulWidget {
+  final double progress; // 0.0 - 1.0
+  final Color backgroundColor;
+  final Color barColor;
+  final Color trackColor;
+
+  const TaskProgressCard({
+    super.key,
+    required this.progress,
+    this.backgroundColor = const Color(0xFF1FBCA3),
+    this.barColor = Colors.black,
+    this.trackColor = const Color(0x33000000), // black @ 20% opacity
+  });
+
+  @override
+  State<TaskProgressCard> createState() => _TaskProgressCardState();
+}
+
+class _TaskProgressCardState extends State<TaskProgressCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: widget.progress,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: U.Theme.divider,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AnimatedBuilder(
+                animation: _animation,
+                builder: (context, _) => Text(
+                  '${(_animation.value * 100).round()}%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, _) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: LinearProgressIndicator(
+                  value: _animation.value,
+                  minHeight: 8,
+                  backgroundColor: widget.trackColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(widget.barColor),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

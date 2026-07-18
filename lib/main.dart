@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_ai_coach/data_providers/business_ws/business_ws.dart';
@@ -5,12 +7,15 @@ import 'package:personal_ai_coach/domains/business_repository/business_repositor
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 import 'package:personal_ai_coach/modules/app/router.dart';
 
-void main() async{
+void main() async {
   BusinessWs.Init(onUnauthorized: () {}, onError: (message) {});
 
-  runApp(RepositoryProvider(
-    create: (context) => BusinessRepository(),
-    child: const MainApp()));
+  runApp(
+    RepositoryProvider(
+      create: (context) => BusinessRepository(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -21,6 +26,16 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: router,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        physics: BouncingScrollPhysics(),
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.trackpad,
+          PointerDeviceKind.invertedStylus,
+        },
+      ),
     );
   }
 }
