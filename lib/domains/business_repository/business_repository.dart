@@ -75,7 +75,6 @@ class BusinessRepository {
     messagesList.insert(0, followUpQuestionPrompt);
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.cerebrasAi,
-
       data: {
         // "model": "llama-3.3-70b-versatile",
         "model": "gemma-4-31b",

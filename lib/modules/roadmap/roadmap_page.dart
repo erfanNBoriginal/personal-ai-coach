@@ -59,209 +59,221 @@ class RoadmapPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                U.Stepper(
-                  id: 1,
-                  count: state.count,
-                  onExapndedCountChanged: context
-                      .read<RoadmapCubit>()
-                      .onExpandedCountChanged,
-                  isMoveable: true,
-                  useDashedLine: true,
-                  items: [
-                    ...state.roadmap!.milestones.expand(
-                      (item) => [
-                        StepperItem(
-                          itemBackground: U.Theme.secondaryText.withValues(
-                            alpha: 0.7,
-                          ),
-                          subTitle: 'Milestone ${item.id}',
-                          inProgress: item.order == 1,
-                          isDisabled: item.weeklyObjectives.isEmpty,
-                          isDone: false,
-                          title: item.title,
-                          child: U.Stepper(
-                            id: 2,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: U.Stepper(
+                    primary: false,
+                    id: 1,
+                    count: state.count,
+                    onExapndedCountChanged: context
+                        .read<RoadmapCubit>()
+                        .onExpandedCountChanged,
+                    // isMoveable: true,
+                    useDashedLine: true,
+                    items: [
+                      ...state.roadmap!.milestones.expand(
+                        (item) => [
+                          StepperItem(
+                            padding: EdgeInsets.zero,
+                            itemBackground: U.Theme.secondaryText.withValues(
+                              alpha: 1.0,
+                            ),
+                            subTitle: 'Milestone ${item.id}',
+                            inProgress: item.order == 1,
+                            isDisabled: item.weeklyObjectives.isEmpty,
+                            isDone: false,
+                            title: item.title,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: U.Stepper(
+                                id: 2,
+                                primary: false,
 
-                            // count: state.count,
-                            onExapndedCountChanged: context
-                                .read<RoadmapCubit>()
-                                .onExpandedCountChanged,
-                            // isMoveable: true,
-                            items: [
-                              ...item.weeklyObjectives.expand(
-                                (e) => [
-                                  StepperItem(
-                                    loading: state.loading,
+                                // count: state.count,
+                                onExapndedCountChanged: context
+                                    .read<RoadmapCubit>()
+                                    .onExpandedCountChanged,
+                                // isMoveable: true,
+                                items: [
+                                  ...item.weeklyObjectives.expand(
+                                    (e) => [
+                                      StepperItem(
+                                        loading: state.loading,
+                                        padding: EdgeInsets.zero,
 
-                                    itemBackground: U.Theme.white.withValues(
-                                      alpha: 0.33,
-                                    ),
-                                    subTitle: "week: ${e.week.toString()}",
-                                    inProgress: e.week == 2,
-                                    isDone: e.week == 1,
-                                    title: e.focus,
-                                    onTap: () {
-                                      // print('heyyyyyyyyyyyyyyyy');
-                                      // print(
-                                      //   'currentMilestone: ${item.toMap()} currentWeek: ${e.week.toString()} ',
-                                      // );
-                                      context
-                                          .read<RoadmapCubit>()
-                                          .onWeeklyTasksCreated(
-                                            'user goal and state: ${state.goal} currentMilestone: ${item.toMap().toString()} currentWeek: ${e.week.toString()} ',
-                                          );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                        itemBackground: U.Theme.white
+                                            .withValues(alpha: 0.93),
+                                        subTitle: "week: ${e.week.toString()}",
+                                        inProgress: e.week == 2,
+                                        isDone: e.week == 1,
+                                        title: e.focus,
+                                        onTap: () {
+                                          // print('heyyyyyyyyyyyyyyyy');
+                                          // print(
+                                          //   'currentMilestone: ${item.toMap()} currentWeek: ${e.week.toString()} ',
+                                          // );
+                                          context
+                                              .read<RoadmapCubit>()
+                                              .onWeeklyTasksCreated(
+                                                'user goal and state: ${state.goal} currentMilestone: ${item.toMap().toString()} currentWeek: ${e.week.toString()} ',
+                                              );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
                                             children: [
-                                              // U.Text(
-                                              //   text:
-                                              //       "week: ${e.week.toString()}",
-                                              // ),
-                                              // SizedBox(height: 5),
-                                              U.Text(text: e.outcome),
-                                              // if (state.loading)
-                                              //   Column(
-                                              //     children: [
-                                              //       SizedBox(height: 5),
-                                              //       CircularProgressIndicator(),
-                                              //     ],
-                                              //   ),
-                                              state.weeklyTasks?.weekNumber ==
-                                                      e.week
-                                                  ? U.Stepper(
-                                                      id: 3,
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    // U.Text(
+                                                    //   text:
+                                                    //       "week: ${e.week.toString()}",
+                                                    // ),
+                                                    // SizedBox(height: 5),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                            bottom: 10.0,
+                                                          ),
+                                                      child: U.Text(
+                                                        text: e.outcome,
+                                                      ),
+                                                    ),
+                                                    // if (state.loading)
+                                                    //   Column(
+                                                    //     children: [
+                                                    //       SizedBox(height: 5),
+                                                    //       CircularProgressIndicator(),
+                                                    //     ],
+                                                    //   ),
+                                                    state
+                                                                .weeklyTasks
+                                                                ?.weekNumber ==
+                                                            e.week
+                                                        ? U.Stepper(
+                                                            id: 3,
+                                                            primary: false,
 
-                                                      onExapndedCountChanged:
-                                                          context
-                                                              .read<
-                                                                RoadmapCubit
-                                                              >()
-                                                              .onExpandedCountChanged,
-                                                      isMoveable: true,
-                                                      items: [
-                                                        ...state.weeklyTasks!.days.map(
-                                                          (e) => StepperItem(
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            isDone: false,
-                                                            title: e.date,
-                                                            child: Row(
-                                                              // mainAxisAlignment:
-                                                              //     MainAxisAlignment
-                                                              //         .spaceBetween,
-                                                              children: [
-                                                                Expanded(
-                                                                  child: Container(
-                                                                    decoration: BoxDecoration(
-                                                                      color: U
-                                                                          .Theme
-                                                                          .background
-                                                                          .withValues(
-                                                                            alpha:
-                                                                                0.7,
+                                                            onExapndedCountChanged:
+                                                                context
+                                                                    .read<
+                                                                      RoadmapCubit
+                                                                    >()
+                                                                    .onExpandedCountChanged,
+                                                            // isMoveable: true,
+                                                            items: [
+                                                              ...state.weeklyTasks!.days.map(
+                                                                (
+                                                                  e,
+                                                                ) => StepperItem(
+                                                                  itemBackground: U
+                                                                      .Theme
+                                                                      .white
+                                                                      .withValues(
+                                                                        alpha:
+                                                                            0.93,
+                                                                      ),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  isDone: false,
+                                                                  title: e.date,
+                                                                  child: Row(
+                                                                    // mainAxisAlignment:
+                                                                    //     MainAxisAlignment
+                                                                    //         .spaceBetween,
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                            color: U.Theme.background.withValues(
+                                                                              alpha: 0.7,
+                                                                            ),
+                                                                            border: Border.all(
+                                                                              width: 0.7,
+                                                                              color: U.Theme.primaryBorder.withValues(
+                                                                                alpha: 0.6,
+                                                                              ),
+                                                                            ),
+                                                                            borderRadius: BorderRadius.circular(
+                                                                              12,
+                                                                            ),
                                                                           ),
-                                                                      border: Border.all(
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.all(
+                                                                              8.0,
+                                                                            ),
+                                                                            child: U.Text(
+                                                                              softWrap: true,
+                                                                              color: U.Theme.primaryText,
+                                                                              text: e.primaryTask.description,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
                                                                         width:
-                                                                            0.7,
-                                                                        color: U
-                                                                            .Theme
-                                                                            .primaryBorder
-                                                                            .withValues(
+                                                                            5,
+                                                                      ),
+                                                                      GestureDetector(
+                                                                        onTap: () {
+                                                                          GoRouter.of(
+                                                                            context,
+                                                                          ).pushNamed(
+                                                                            TaskDetailPage.route,
+                                                                            extra: {
+                                                                              'milestone': item.title,
+                                                                              'task': e,
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                        child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                            color: U.Theme.divider.withValues(
                                                                               alpha: 0.6,
                                                                             ),
-                                                                      ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            12,
+                                                                            borderRadius: BorderRadius.circular(
+                                                                              50,
+                                                                            ),
                                                                           ),
-                                                                    ),
-                                                                    child: Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                            8.0,
+                                                                          padding:
+                                                                              const EdgeInsets.all(
+                                                                                4,
+                                                                              ),
+                                                                          child: const Icon(
+                                                                            Icons.arrow_right_sharp,
+                                                                            size:
+                                                                                21,
                                                                           ),
-                                                                      child: U.Text(
-                                                                        softWrap:
-                                                                            true,
-                                                                        color: U
-                                                                            .Theme
-                                                                            .primaryText,
-                                                                        text: e
-                                                                            .primaryTask
-                                                                            .description,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 5,
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    GoRouter.of(
-                                                                      context,
-                                                                    ).pushNamed(
-                                                                      TaskDetailPage
-                                                                          .route,
-                                                                      extra: {
-                                                                        'milestone':
-                                                                            item.title,
-                                                                     'task' : e
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child: Container(
-                                                                    decoration: BoxDecoration(
-                                                                      color: U
-                                                                          .Theme
-                                                                          .divider
-                                                                          .withValues(
-                                                                            alpha:
-                                                                                0.6,
-                                                                          ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            50,
-                                                                          ),
-                                                                    ),
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                          4,
                                                                         ),
-                                                                    child: const Icon(
-                                                                      Icons
-                                                                          .arrow_right_sharp,
-                                                                      size: 21,
-                                                                    ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : SizedBox(),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        : SizedBox(),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(width: 12),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 12),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 121),
               ],

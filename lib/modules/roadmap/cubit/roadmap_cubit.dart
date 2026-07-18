@@ -38,9 +38,6 @@ class RoadmapCubit extends Cubit<RoadmapState> {
       ids.add(stepperId);
       final index = ids.indexWhere((element) => element == stepperId) + 1;
       emit(state.copyWith(count: index));
-      // print('state.count - (ids.length - index)');
-      // print(ids.toString());
-      // print('length: ${ids.length} vs index: $index vs count: ${state.count} ');
     } else {
       if (shouldExpand) {
         final index = ids.indexWhere((element) => element == stepperId);
