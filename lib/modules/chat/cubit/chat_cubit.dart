@@ -67,9 +67,8 @@ class ChatCubit extends Cubit<ChatState> {
     print(roadmapMap.toString());
     final res = await _repo.createRoadmap(
       message: Message.user(
-        content:
-            // roadmapMap.toString()
-            '{user goal: i want to be a flutter developer, experience_level: Absolute beginner (no coding experience), time_commitment: 6-15 hours per week, goal_timeline: 12 months (Slow & steady), lifestyle_constraints: Fixed work/study hours (mostly weekends/evenings)}',
+        content: roadmapMap.toString(),
+        // '{user goal: i want to become a python developer, experience_level: Intermediate (Comfortable with another language), time_commitment: Medium (6-15 hours per week), preferred_time_of_day: Afternoon (12-5 PM), desired_timeline: Steady (6 months), lifestyle_constraints: Family or caregiving responsibilities}'',
       ),
     );
     final Map<String, dynamic> roadmapJson = jsonDecode(

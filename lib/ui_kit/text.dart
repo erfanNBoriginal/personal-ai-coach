@@ -13,6 +13,7 @@ class Text extends M.StatelessWidget {
   final bool isCentered;
   final TextOverflow overFlow;
   final bool softWrap;
+  final int? maxLines;
   const Text({
     super.key,
     required this.text,
@@ -20,8 +21,9 @@ class Text extends M.StatelessWidget {
     this.textSize = TextSize.s12,
     this.textWeight = TextWeight.md,
     this.isCentered = false,
-    this.softWrap = false,
-    this.overFlow = TextOverflow.ellipsis,
+    this.softWrap = true,
+    this.overFlow = TextOverflow.clip,
+    this.maxLines,
   });
   // ignore: unused_element
   M.FontWeight get _getWeight {
@@ -62,9 +64,10 @@ class Text extends M.StatelessWidget {
   M.Widget build(M.BuildContext context) {
     return M.Text(
       text,
+      maxLines: maxLines,
       softWrap: softWrap,
       overflow: overFlow,
-      textAlign:isCentered ? M.TextAlign.center : null,
+      textAlign: isCentered ? M.TextAlign.center : null,
       style: M.TextStyle(
         fontWeight: _getWeight,
         fontSize: _getSize,

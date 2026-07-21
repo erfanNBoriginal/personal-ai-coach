@@ -59,6 +59,7 @@ class _SchedulePageState extends State<SchedulePage> {
       create: (context) => ScheduleCubit(initialTasks: widget.initialTasks),
       child: BlocBuilder<ScheduleCubit, ScheduleState>(
         builder: (context, state) {
+          final cubit = context.read<ScheduleCubit>();
           print('_maxPageHeightsssssssssssss');
           print(_maxPageHeight);
           return Scaffold(
@@ -69,12 +70,14 @@ class _SchedulePageState extends State<SchedulePage> {
                   const SizedBox(height: 22),
                   // Wrap ScrollableTabview in SizedBox with measured height
                   SizedBox(
-                    height: 
-                    350 +
-                    (_maxPageHeight > 0
-                        ? _maxPageHeight
-                        : MediaQuery.of(context).size.height * 0.7),
+                    height:
+                        350 +
+                        (_maxPageHeight > 0
+                            ? _maxPageHeight
+                            : MediaQuery.of(context).size.height * 0.7),
                     child: U.ScrollableTabview(
+                      tabController: cubit.tabCtril,
+                      pageController: cubit.pageCtrl,
                       headers: [
                         ...state.dailyTasks.map(
                           (e) => Padding(

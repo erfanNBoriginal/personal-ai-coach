@@ -86,7 +86,8 @@ class OutlineButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(50),
         onTap: disabled ? null : onTap,
         child: Container(
-          height: _size,
+          //TODO:
+          // height: _size,
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: _color.border),
             color: _foregroundColor,
@@ -97,13 +98,18 @@ class OutlineButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (leading != null) ...[SizedBox(width: 15), leading!],
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: U.Text(
-                    text: title,
-                    color: _color.text,
-                    textSize: _color.size,
-                    textWeight: _color.weight,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: U.Text(
+                      // maxLines: 5,
+                      softWrap: true,
+                      isCentered: true,
+                      text: title,
+                      color: _color.text,
+                      textSize: _color.size,
+                      textWeight: _color.weight,
+                    ),
                   ),
                 ),
               ],

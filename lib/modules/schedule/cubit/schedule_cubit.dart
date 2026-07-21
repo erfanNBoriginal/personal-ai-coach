@@ -1,14 +1,15 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
+import 'package:flutter/material.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/weekly_tasks.dart';
 
 part 'schedule_state.dart';
 
 class ScheduleCubit extends Cubit<ScheduleState> {
   final List<SpecificTasks>? initialTasks;
+  final ScrollController tabCtril = ScrollController();
+  final PageController pageCtrl = PageController();
 
-  ScheduleCubit({this.initialTasks}) : super(ScheduleState.init()){
+  ScheduleCubit({this.initialTasks}) : super(ScheduleState.init()) {
     onInit();
   }
 
@@ -18,7 +19,7 @@ class ScheduleCubit extends Cubit<ScheduleState> {
     print(state.dailyTasks);
   }
 
-  void selectDay(int index) {
-    emit(state.copyWith(selectedDayIndex: index));
+  void selectDay(String day) {
+    emit(state.copyWith(selectedDayIndex: day));
   }
 }

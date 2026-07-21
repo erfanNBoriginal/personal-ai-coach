@@ -175,12 +175,26 @@ class _ChatPgeState extends State<ChatPge> {
                                       child: U.Button(
                                         title: 'roadmap',
                                         onTap: () async {
-                                          final res = await chatCubit
+                                          final res = await context
+                                              .read<ChatCubit>()
                                               .onRoadmapGenrated();
                                           GoRouter.of(context).pushNamed(
                                             RoadmapPage.route,
-                                            extra: res,
+                                            extra: {
+                                              'goal': context
+                                                  .read<ChatCubit>()
+                                                  .state
+                                                  .goal,
+                                              'roadMap': res,
+                                            },
                                           );
+                                          // final res = await chatCubit
+                                          //     .onRoadmapGenrated();
+                                          // GoRouter.of(context).pushNamed(
+                                          //   RoadmapPage.route,
+                                          //   extra: {
+                                          //     'roadmap' : res},
+                                          // );
                                         },
                                         buttonColor: U.ButtonColor.primary,
                                       ),
