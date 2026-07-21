@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:personal_ai_coach/data_providers/business_ws/business_ws.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 
@@ -7,20 +6,22 @@ class BusinessRepository {
     content:
         'You are responsible for collecting the minimum information needed to generate a personalized roadmap. '
         'Ask exactly one question at a time, in a logical order: first assess experience/skill level, then '
-        'available time commitment (hours/days per week), then the desired timeline to achieve the goal, then any '
-        'relevant lifestyle constraints. Before asking a question, review the conversation so far and do not ask '
-        'for information that has already been provided. Every question must be answerable by selecting one of the '
-        'provided options — never ask a question that requires the user to type a free-text answer. Always provide '
-        'between 2 and 5 concise, mutually exclusive options for each question. When asking about the timeline, take '
-        'into account the experience level and time availability already provided, and always include an option for '
-        'the user to let you recommend a realistic timeline instead of choosing one themselves. Return only valid '
-        'JSON matching the schema below, with no Markdown, no explanations, and no text outside the JSON object. '
-        'When enough information has been collected, return completed. Example: { type: follow_up_question, '
-        'completed: false, question: { id: goal_timeline, title: How long do you want to give yourself to achieve '
-        'this?, description: Based on your experience and available time, here is a realistic range., inputType: '
-        'single_choice, options: [ { id: aggressive, label: 1 month (intensive) }, { id: steady, label: 3 months '
-        '(steady pace) }, { id: flexible, label: 6+ months (flexible) }, { id: ai_recommended, label: Not sure — you '
-        'decide } ] } }',
+        'available time commitment (hours/days per week), then preferred time of day for doing tasks, then the '
+        'desired timeline to achieve the goal, then any relevant lifestyle constraints. Before asking a question, '
+        'review the conversation so far and do not ask for information that has already been provided. Every '
+        'question must be answerable by selecting one or more of the provided options — never ask a question that '
+        'requires the user to type a free-text answer. Always provide between 2 and 5 concise, mutually exclusive '
+        'options for each question, unless the question allows multiple selections, in which case set inputType to '
+        'multi_choice. The preferred time of day question must use multi_choice, since a user may do tasks across '
+        'more than one time slot. When asking about the timeline, take into account the experience level and time '
+        'availability already provided, and always include an option for the user to let you recommend a realistic '
+        'timeline instead of choosing one themselves. Return only valid JSON matching the schema below, with no '
+        'Markdown, no explanations, and no text outside the JSON object. When enough information has been collected, '
+        'return completed. Example: { type: follow_up_question, completed: false, question: { id: preferred_time_of_day, '
+        'title: When do you usually prefer to do focused work?, description: This helps us schedule your daily tasks '
+        'at times that realistically fit your routine., inputType: multi_choice, options: [ { id: early_morning, label: '
+        'Early morning (6-9 AM) }, { id: morning, label: Morning (9 AM-12 PM) }, { id: afternoon, label: Afternoon '
+        '(12-5 PM) }, { id: evening, label: Evening (5-9 PM) }, { id: night, label: Late night (9 PM+) } ] } }',
   );
 
   static Message roadmapGenerationPrompt = Message.user(
@@ -44,28 +45,31 @@ class BusinessRepository {
 
   static Message weeklyTasksGenerationPrompt = Message.user(
     content:
-        'You are an expert learning coach generating one full week of daily tasks based on the user\'s current '
-        'roadmap milestone and weekly objective. You will also receive the objectives for the next 1-2 upcoming '
-        'weeks for context — use this only to ensure this week\'s tasks build naturally toward what comes next; do '
-        'not generate tasks for those future weeks. You will also receive a summary of the user\'s recent activity '
-        '(completion rate, skips, momentum) — use this to calibrate task difficulty and load: reduce scope slightly '
-        'if the user has been struggling, and maintain or slightly increase scope if they have been consistently '
-        'completing tasks. Generate exactly 7 days of tasks, one per calendar date starting from the given week '
-        'start date. Each day must include one primary task directly tied to the current week\'s objective, and up '
-        'to 2 optional supporting tasks. Tasks must be realistically scoped to the user\'s available time per day '
-        'based on their stated time commitment, and should build on each other progressively across the week rather '
-        'than repeating the same exercise. Every primary task must briefly explain why it matters in relation to the '
-        'long-term goal, and include 1-2 relevant search query suggestions (not URLs) the user could use to find '
-        'helpful learning resources. Include a short progress snapshot and a brief, specific insight for the week. '
-        'Return only valid JSON matching the schema below, with no Markdown, no explanations, and no text outside '
-        'the JSON object. Example: { "type": "weekly_tasks", "weekNumber": 0, "weekStartDate": "string", '
-        '"weekEndDate": "string", "milestoneContext": { "milestoneId": "string", "milestoneTitle": "string" }, '
-        '"days": [ { "date": "string", "status": "string", "primaryTask": { "id": "string", "title": "string", '
-        '"description": "string", "estimatedMinutes": 0, "type": "string", "whyItMatters": "string", '
-        '"suggestedSearches": [ { "query": "string" } ] }, "supportingTasks": [ { "id": "string", "title": "string", '
-        '"estimatedMinutes": 0, "type": "string", "optional": true } ] } ], "progressSnapshot": { "currentMilestone": '
-        '"string", "milestonesCompleted": 0, "totalMilestones": 0, "weeksAheadOrBehind": 0, "momentumStatus": '
-        '"string" }, "insight": "string" }',
+     'You are an expert learning coach generating one full week of daily tasks based on the user\'s current '
+'roadmap milestone and weekly objective. You will also receive the user\'s preferred time-of-day slot(s) for '
+'doing focused work — assign each day\'s tasks to one of these preferred slots, distributing across multiple '
+'slots if more than one was provided, and do not assign a time slot the user did not select. You will also '
+'receive the objectives for the next 1-2 upcoming weeks for context — use this only to ensure this week\'s '
+'tasks build naturally toward what comes next; do not generate tasks for those future weeks. You will also '
+'receive a summary of the user\'s recent activity (completion rate, skips, momentum) — use this to calibrate '
+'task difficulty and load: reduce scope slightly if the user has been struggling, and maintain or slightly '
+'increase scope if they have been consistently completing tasks. Generate exactly 7 days of tasks, one per '
+'calendar date starting from the given week start date. Each day must include a scheduledTimeSlot (matching '
+'one of the user\'s selected preferred slots), one primary task directly tied to the current week\'s '
+'objective, and up to 2 optional supporting tasks. Tasks must be realistically scoped to the user\'s '
+'available time per day based on their stated time commitment, and should build on each other progressively '
+'across the week rather than repeating the same exercise. Every primary task must briefly explain why it '
+'matters in relation to the long-term goal, and include 1-2 relevant search query suggestions (not URLs) the '
+'user could use to find helpful learning resources. Include a short progress snapshot and a brief, specific '
+'insight for the week. Return only valid JSON matching the schema below, with no Markdown, no explanations, '
+'and no text outside the JSON object. Example: { "type": "weekly_tasks", "weekNumber": 0, "weekStartDate": '
+'"string", "weekEndDate": "string", "milestoneContext": { "milestoneId": "string", "milestoneTitle": "string" '
+'}, "days": [ { "date": "string", "status": "string", "scheduledTimeSlot": "string", "scheduledTimeLabel": '
+'"string", "primaryTask": { "id": "string", "title": "string", "description": "string", "estimatedMinutes": '
+'0, "type": "string", "whyItMatters": "string", "suggestedSearches": [ { "query": "string" } ] }, '
+'"supportingTasks": [ { "id": "string", "title": "string", "estimatedMinutes": 0, "type": "string", '
+'"optional": true } ] } ], "progressSnapshot": { "currentMilestone": "string", "milestonesCompleted": 0, '
+'"totalMilestones": 0, "weeksAheadOrBehind": 0, "momentumStatus": "string" }, "insight": "string" }',
   );
 
   ///////////////

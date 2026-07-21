@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       scrollBehavior: const MaterialScrollBehavior().copyWith(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         dragDevices: {
           PointerDeviceKind.mouse,
           PointerDeviceKind.stylus,

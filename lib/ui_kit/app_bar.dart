@@ -12,11 +12,11 @@ class AppBar extends StatelessWidget {
     return Container(
       height: 77,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: AlignmentGeometry.topCenter,
-          end: AlignmentGeometry.bottomCenter,
-          colors: blur
-              ? [
+        gradient: blur
+            ? LinearGradient(
+                begin: AlignmentGeometry.topCenter,
+                end: AlignmentGeometry.bottomCenter,
+                colors: [
                   Color(0xFFF8F8F8).withValues(alpha: 1.0),
                   Color(0xFFF8F8F8).withValues(alpha: 1.0),
                   Color(0xFFF8F8F8).withValues(alpha: 1.0),
@@ -24,9 +24,9 @@ class AppBar extends StatelessWidget {
                   Color(0xFFF8F8F8).withValues(alpha: 0.6),
                   Color(0xFFF8F8F8).withValues(alpha: 0.0),
                   // Colors.black,
-                ]
-              : [],
-        ),
+                ],
+              )
+            : null,
         color: blur ? null : U.Theme.background.withValues(alpha: 1.0),
       ),
       child: Padding(

@@ -57,13 +57,17 @@ class MilestoneContext {
 
 class DayTask {
   final String date;
-  String status; // mutable: updated locally as user completes/skips
+  String status;
+  final String scheduledTimeSlot;
+  final String scheduledTimeLabel;
   final PrimaryTask primaryTask;
   final List<SupportingTask> supportingTasks;
 
   DayTask({
     required this.date,
     required this.status,
+    required this.scheduledTimeSlot,
+    required this.scheduledTimeLabel,
     required this.primaryTask,
     required this.supportingTasks,
   });
@@ -72,6 +76,8 @@ class DayTask {
     return DayTask(
       date: map['date'] ?? '',
       status: map['status'] ?? 'pending',
+      scheduledTimeSlot: map['scheduledTimeSlot'] ?? '',
+      scheduledTimeLabel: map['scheduledTimeLabel'] ?? '',
       primaryTask: PrimaryTask.fromMap(
         map['primaryTask'] as Map<String, dynamic>? ?? {},
       ),
