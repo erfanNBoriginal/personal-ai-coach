@@ -46,32 +46,31 @@ class GoalTextfield extends StatelessWidget {
                     Spacer(),
                     U.Button(
                       title: 'send',
-                      onTap: ()
-                      //  async {
-                      //   final res = await context
-                      //       .read<ChatCubit>()
-                      //       .onRoadmapGenrated();
-                      //   GoRouter.of(context).pushNamed(
-                      //     RoadmapPage.route,
-                      //     extra: {
-                      //       'goal': context.read<ChatCubit>().state.goal,
-                      //       'roadMap': res,
-                      //     },
-                      //   );
-                      // },
-                      async {
+                      onTap: () async {
                         final res = await context
                             .read<ChatCubit>()
-                            .onGoalCreated(
-                              message: Message(
-                                role: 'user',
-                                content: context
-                                    .read<ChatCubit>()
-                                    .goalCtrl
-                                    .text,
-                              ),
-                            );
+                            .onRoadmapGenrated();
+                        GoRouter.of(context).pushNamed(
+                          RoadmapPage.route,
+                          extra: {
+                            'goal': context.read<ChatCubit>().state.goal,
+                            'roadMap': res,
+                          },
+                        );
                       },
+                      // async {
+                      // final res = await context
+                      // .read<ChatCubit>()
+                      // .onGoalCreated(
+                      // message: Message(
+                      // role: 'user',
+                      // content: context
+                      // .read<ChatCubit>()
+                      // .goalCtrl
+                      // .text,
+                      // ),
+                      // );
+                      // },
                       buttonColor: U.ButtonColor.primary,
                     ),
                   ],

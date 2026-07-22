@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:flutter/material.dart';
+
 class WeeklyTasks {
   final String type;
   final int weekNumber;
@@ -93,6 +95,8 @@ class PrimaryTask {
   final String title;
   final String description;
   final int estimatedMinutes;
+  final String scheduledStartTime; // "HH:mm"
+  final String scheduledEndTime; // "HH:mm"
   final String type;
   final String whyItMatters;
   final List<SuggestedSearch> suggestedSearches;
@@ -102,6 +106,8 @@ class PrimaryTask {
     required this.title,
     required this.description,
     required this.estimatedMinutes,
+    required this.scheduledStartTime,
+    required this.scheduledEndTime,
     required this.type,
     required this.whyItMatters,
     required this.suggestedSearches,
@@ -113,6 +119,8 @@ class PrimaryTask {
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       estimatedMinutes: map['estimatedMinutes'] ?? 0,
+      scheduledStartTime: map['scheduledStartTime'] ?? '',
+      scheduledEndTime: map['scheduledEndTime'] ?? '',
       type: map['type'] ?? '',
       whyItMatters: map['whyItMatters'] ?? '',
       suggestedSearches: List.from(
@@ -120,12 +128,20 @@ class PrimaryTask {
       ).map((e) => SuggestedSearch.fromMap(e)).toList(),
     );
   }
+
+  /// Convenience for schedule-page rendering
+  TimeOfDay get startTimeOfDay {
+    final parts = scheduledStartTime.split(':');
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
 }
 
 class SupportingTask {
   final String id;
   final String title;
   final int estimatedMinutes;
+  final String scheduledStartTime;
+  final String scheduledEndTime;
   final String type;
   final bool optional;
 
@@ -133,6 +149,8 @@ class SupportingTask {
     required this.id,
     required this.title,
     required this.estimatedMinutes,
+    required this.scheduledStartTime,
+    required this.scheduledEndTime,
     required this.type,
     required this.optional,
   });
@@ -142,6 +160,8 @@ class SupportingTask {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       estimatedMinutes: map['estimatedMinutes'] ?? 0,
+      scheduledStartTime: map['scheduledStartTime'] ?? '',
+      scheduledEndTime: map['scheduledEndTime'] ?? '',
       type: map['type'] ?? '',
       optional: map['optional'] == true,
     );

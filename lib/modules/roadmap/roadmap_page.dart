@@ -223,30 +223,35 @@ class RoadmapPage extends StatelessWidget {
                                                                       ),
                                                                       GestureDetector(
                                                                         onTap: () {
-                                                                          GoRouter.of(
-                                                                            context,
-                                                                          ).pushNamed(
-                                                                            SchedulePage.route,
-                                                                            extra: [
-                                                                              SpecificTasks(
-                                                                                day: '1',
-                                                                                tasks: state.weeklyTasks!.days,
-                                                                              ),
+                                                                          // GoRouter.of(
+                                                                          //   context,
+                                                                          // ).pushNamed(
+                                                                          //   SchedulePage.route,
+                                                                          //   extra: [
+                                                                          //     SpecificTasks(
+                                                                          //       day: '1',
+                                                                          //       tasks: state.weeklyTasks!.days,
+                                                                          //     ),
 
-                                                                              SpecificTasks(
-                                                                                day: e.date,
-                                                                                tasks: state.weeklyTasks!.days,
-                                                                              ),
-                                                                              SpecificTasks(
-                                                                                day: e.date,
-                                                                                tasks: state.weeklyTasks!.days,
-                                                                              ),
-                                                                              SpecificTasks(
-                                                                                day: e.date,
-                                                                                tasks: [],
-                                                                              ),
-                                                                            ],
+                                                                          //     SpecificTasks(
+                                                                          //       day: e.date,
+                                                                          //       tasks: state.weeklyTasks!.days,
+                                                                          //     ),
+                                                                          //     SpecificTasks(
+                                                                          //       day: e.date,
+                                                                          //       tasks: state.weeklyTasks!.days,
+                                                                          //     ),
+                                                                          //     SpecificTasks(
+                                                                          //       day: e.date,
+                                                                          //       tasks: [],
+                                                                          //     ),
+                                                                          //   ],
+                                                                          // );
+                                                                          print(
+                                                                            'dayasssssssssssssss',
                                                                           );
+                                                                          print(e.primaryTask.scheduledStartTime);
+                                                                          print(e.primaryTask.scheduledEndTime);
                                                                           // GoRouter.of(
                                                                           //   context,
                                                                           // ).pushNamed(
