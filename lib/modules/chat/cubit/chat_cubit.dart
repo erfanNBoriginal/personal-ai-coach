@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/followup_question.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/goal.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
 import 'package:uuid/uuid.dart';
 
 part 'chat_state.dart';
@@ -51,7 +50,7 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(selectedQuestions: list));
   }
 
-  Future<Roadmap> onRoadmapGenrated() async {
+  Future<({Roadmap roadmap, WeeklyTasks tasks})> onRoadmapGenrated() async {
     emit(state.copyWith(loading: true));
     Map<String, String> roadmapMap = {};
     roadmapMap = {'user goal': '${state.goal}'};
@@ -63,8 +62,6 @@ class ChatCubit extends Cubit<ChatState> {
         }.entries,
       );
     }
-    print('roadmappppppppppppppp');
-    print(roadmapMap.toString());
     final res = await _repo.createRoadmap(
       message: Message.user(
         // content: roadmapMap.toString(),
@@ -76,8 +73,18 @@ class ChatCubit extends Cubit<ChatState> {
       res['message']['content'],
     );
     final roadmap = Roadmap.fromMap(roadmapJson);
-    print('roadmap.milestones.lengthtttttttttttttttttt');
+    final tasksRes = await _repo.createWeeklyTasks(
+      Message.user(
+        content:
+            'user goal and state: ${state.goal} currentMilestone: ${roadmap.milestones[0].toMap().toString()} currentWeek: ${roadmap.milestones[0].weeklyObjectives[0].toString()} ',
+      ),
+    );
+    final Map<String, dynamic> weekJson = jsonDecode(
+      tasksRes['message']['content'],
+    );
+    WeeklyTasks weeklyTasks = WeeklyTasks.fromMap(weekJson);
+
     emit(state.copyWith(loading: false));
-    return roadmap;
+    return (roadmap: roadmap, tasks: weeklyTasks);
   }
 }

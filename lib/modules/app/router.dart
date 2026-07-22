@@ -37,6 +37,7 @@ final router = GoRouter(
                 return RoadmapPage(
                   goal: extra['goal'] as String?,
                   roadMap: extra['roadMap'] as dynamic,
+                  tasks: extra['tasks'] as dynamic,
                 );
               },
             ),

@@ -54,7 +54,8 @@ class GoalTextfield extends StatelessWidget {
                           RoadmapPage.route,
                           extra: {
                             'goal': context.read<ChatCubit>().state.goal,
-                            'roadMap': res,
+                            'roadMap': res.roadmap,
+                            'tasks': res.tasks,
                           },
                         );
                       },

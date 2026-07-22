@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/weekly_tasks.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
 import 'package:personal_ai_coach/modules/roadmap/cubit/roadmap_cubit.dart';
-import 'package:personal_ai_coach/modules/schedule/schedule_page.dart';
 import 'package:personal_ai_coach/ui_kit/stepper.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
@@ -13,7 +11,8 @@ class RoadmapPage extends StatelessWidget {
   static String route = '/roadmap';
   final Roadmap? roadMap;
   final String? goal;
-  const RoadmapPage({super.key, required this.roadMap, this.goal});
+  final WeeklyTasks? tasks;
+  const RoadmapPage({super.key, required this.roadMap, this.goal, this.tasks});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +20,7 @@ class RoadmapPage extends StatelessWidget {
       create: (context) => RoadmapCubit(
         initialRoadmap: roadMap,
         repo: context.read<BusinessRepository>(),
+        weeklyTasks: tasks,
       ),
       child: BlocBuilder<RoadmapCubit, RoadmapState>(
         builder: (context, state) {
@@ -159,7 +159,6 @@ class RoadmapPage extends StatelessWidget {
                                                         ? U.Stepper(
                                                             id: 3,
                                                             primary: false,
-
                                                             onExapndedCountChanged:
                                                                 context
                                                                     .read<
@@ -250,8 +249,12 @@ class RoadmapPage extends StatelessWidget {
                                                                           print(
                                                                             'dayasssssssssssssss',
                                                                           );
-                                                                          print(e.primaryTask.scheduledStartTime);
-                                                                          print(e.primaryTask.scheduledEndTime);
+                                                                          print(
+                                                                            e.primaryTask.scheduledStartTime,
+                                                                          );
+                                                                          print(
+                                                                            e.primaryTask.scheduledEndTime,
+                                                                          );
                                                                           // GoRouter.of(
                                                                           //   context,
                                                                           // ).pushNamed(

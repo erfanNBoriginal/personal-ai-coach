@@ -100,6 +100,7 @@ class BusinessRepository {
     messageListt.add(message);
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.cerebrasAi,
+
       data: {
         "model": "gemma-4-31b",
         "messages": messageListt.map((e) => e.toMap()).toList(),

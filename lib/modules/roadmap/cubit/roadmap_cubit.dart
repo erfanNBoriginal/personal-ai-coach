@@ -1,7 +1,6 @@
+// ignore_for_file: prefer_initializing_formals
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
@@ -13,14 +12,15 @@ class RoadmapCubit extends Cubit<RoadmapState> {
   final BusinessRepository _repo;
   final Roadmap? initialRoadmap;
   final String? initialGoal;
+  final WeeklyTasks? weeklyTasks;
 
-  // ignore: prefer_initializing_formals
   RoadmapCubit({
     this.initialGoal,
     this.initialRoadmap,
+    this.weeklyTasks,
     required BusinessRepository repo,
   }) : _repo = repo,
-       super(RoadmapState.init()) {
+       super(RoadmapState.init(weeklyTasks: weeklyTasks)) {
     onInit();
   }
 

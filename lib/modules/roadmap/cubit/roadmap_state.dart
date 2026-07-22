@@ -14,13 +14,11 @@ class RoadmapState {
     this.weeklyTasks,
   });
 
-  RoadmapState.init()
+  RoadmapState.init({this.weeklyTasks})
     : roadmap = null,
       goal = '',
       loading = false,
-      weeklyTasks = null,
-      count = 0
-      ;
+      count = 0;
 
   RoadmapState copyWith({
     Roadmap? roadmap,
