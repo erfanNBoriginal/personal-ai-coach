@@ -3,13 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_ai_coach/data_providers/business_ws/business_ws.dart';
+import 'package:personal_ai_coach/data_providers/hive/hive_db.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 import 'package:personal_ai_coach/modules/app/router.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveDB.init(appName: 'ai coach');
   BusinessWs.Init(onUnauthorized: () {}, onError: (message) {});
-
   runApp(
     RepositoryProvider(
       create: (context) => BusinessRepository(),
