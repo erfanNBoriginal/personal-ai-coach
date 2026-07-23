@@ -1,7 +1,13 @@
 import 'package:personal_ai_coach/data_providers/business_ws/business_ws.dart';
+import 'package:personal_ai_coach/domains/business_repository/business_box.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 
 class BusinessRepository {
+  static Future<BusinessRepository> init() async {
+    await BusinessBox.open();
+    return BusinessRepository();
+  }
+
   static Message followUpQuestionPrompt = Message.user(
     content:
         'You are responsible for collecting the minimum information needed to generate a personalized roadmap. '
@@ -100,7 +106,6 @@ class BusinessRepository {
     messageListt.add(message);
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.cerebrasAi,
-
       data: {
         "model": "gemma-4-31b",
         "messages": messageListt.map((e) => e.toMap()).toList(),

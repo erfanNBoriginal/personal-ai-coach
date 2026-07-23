@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
 import 'package:personal_ai_coach/modules/roadmap/cubit/roadmap_cubit.dart';
 import 'package:personal_ai_coach/ui_kit/stepper.dart';
@@ -246,14 +247,57 @@ class RoadmapPage extends StatelessWidget {
                                                                           //     ),
                                                                           //   ],
                                                                           // );
+
+                                                                          List<
+                                                                            SpecificTasks
+                                                                          >
+                                                                          tasks = state
+                                                                              .weeklyTasks!
+                                                                              .days
+                                                                              .asMap()
+                                                                              .entries
+                                                                              .map(
+                                                                                (
+                                                                                  e,
+                                                                                ) => SpecificTasks(
+                                                                                  day: e.key.toString(),
+                                                                                  tasks: [
+                                                                                    e.value,
+                                                                                  ],
+                                                                                ),
+                                                                              )
+                                                                              .toList();
+                                                                          final list = tasks
+                                                                              .map(
+                                                                                (
+                                                                                  e,
+                                                                                ) => e.toMap(),
+                                                                              )
+                                                                              .toList();
+
                                                                           print(
                                                                             'dayasssssssssssssss',
                                                                           );
                                                                           print(
-                                                                            e.primaryTask.scheduledStartTime,
+                                                                            list,
                                                                           );
+                                                                          final List<
+                                                                            SpecificTasks
+                                                                          >
+                                                                          specificList =
+                                                                              List.from(
+                                                                                    list,
+                                                                                  )
+                                                                                  .map(
+                                                                                    (
+                                                                                      e,
+                                                                                    ) => SpecificTasks.fromMap(
+                                                                                      e
+                                                                                    ),
+                                                                                  )
+                                                                                  .toList();
                                                                           print(
-                                                                            e.primaryTask.scheduledEndTime,
+                                                                            specificList.length,
                                                                           );
                                                                           // GoRouter.of(
                                                                           //   context,

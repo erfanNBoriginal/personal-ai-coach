@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/weekly_tasks.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 import 'package:personal_ai_coach/modules/schedule/cubit/schedule_cubit.dart';
 import 'package:personal_ai_coach/modules/schedule/daily_schedule.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;

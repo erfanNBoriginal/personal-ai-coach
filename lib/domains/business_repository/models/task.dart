@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:flutter/material.dart';
 
 class WeeklyTasks {
@@ -41,6 +40,19 @@ class WeeklyTasks {
       insight: map['insight'] ?? '',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type,
+      'weekNumber': weekNumber,
+      'weekStartDate': weekStartDate,
+      'weekEndDate': weekEndDate,
+      'milestoneContext': milestoneContext.toMap(),
+      'days': days.map((e) => e.toMap()).toList(),
+      'progressSnapshot': progressSnapshot.toMap(),
+      'insight': insight,
+    };
+  }
 }
 
 class MilestoneContext {
@@ -54,6 +66,10 @@ class MilestoneContext {
       milestoneId: map['milestoneId'] ?? '',
       milestoneTitle: map['milestoneTitle'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'milestoneId': milestoneId, 'milestoneTitle': milestoneTitle};
   }
 }
 
@@ -87,6 +103,17 @@ class DayTask {
         map['supportingTasks'] ?? [],
       ).map((e) => SupportingTask.fromMap(e)).toList(),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'date': date,
+      'status': status,
+      'scheduledTimeSlot': scheduledTimeSlot,
+      'scheduledTimeLabel': scheduledTimeLabel,
+      'primaryTask': primaryTask.toMap(),
+      'supportingTasks': supportingTasks.map((e) => e.toMap()).toList(),
+    };
   }
 }
 
@@ -129,6 +156,20 @@ class PrimaryTask {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'estimatedMinutes': estimatedMinutes,
+      'scheduledStartTime': scheduledStartTime,
+      'scheduledEndTime': scheduledEndTime,
+      'type': type,
+      'whyItMatters': whyItMatters,
+      'suggestedSearches': suggestedSearches.map((e) => e.toMap()).toList(),
+    };
+  }
+
   /// Convenience for schedule-page rendering
   TimeOfDay get startTimeOfDay {
     final parts = scheduledStartTime.split(':');
@@ -166,6 +207,18 @@ class SupportingTask {
       optional: map['optional'] == true,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'estimatedMinutes': estimatedMinutes,
+      'scheduledStartTime': scheduledStartTime,
+      'scheduledEndTime': scheduledEndTime,
+      'type': type,
+      'optional': optional,
+    };
+  }
 }
 
 class SuggestedSearch {
@@ -175,6 +228,10 @@ class SuggestedSearch {
 
   factory SuggestedSearch.fromMap(Map<String, dynamic> map) {
     return SuggestedSearch(query: map['query'] ?? '');
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'query': query};
   }
 }
 
@@ -201,5 +258,15 @@ class ProgressSnapshot {
       weeksAheadOrBehind: map['weeksAheadOrBehind'] ?? 0,
       momentumStatus: map['momentumStatus'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'currentMilestone': currentMilestone,
+      'milestonesCompleted': milestonesCompleted,
+      'totalMilestones': totalMilestones,
+      'weeksAheadOrBehind': weeksAheadOrBehind,
+      'momentumStatus': momentumStatus,
+    };
   }
 }

@@ -11,9 +11,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveDB.init(appName: 'ai coach');
   BusinessWs.Init(onUnauthorized: () {}, onError: (message) {});
+  final businessRepo = await BusinessRepository.init();
   runApp(
     RepositoryProvider(
-      create: (context) => BusinessRepository(),
+      create: (context) => businessRepo,
       child: const MainApp(),
     ),
   );

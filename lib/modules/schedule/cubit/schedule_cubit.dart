@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/weekly_tasks.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 
 part 'schedule_state.dart';
 
