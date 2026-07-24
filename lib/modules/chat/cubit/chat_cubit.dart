@@ -99,9 +99,9 @@ class ChatCubit extends Cubit<ChatState> {
           )),
         )
         .toList();
-
-    _repo.createSchedule(specificTasks);
-
+print('specificTasksssssssssss');
+print(specificTasks);
+    await _repo.createSchedule(specificTasks);
     emit(state.copyWith(loading: false));
     return (roadmap: roadmap, tasks: weeklyTasks);
   }

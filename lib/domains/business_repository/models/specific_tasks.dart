@@ -15,14 +15,19 @@ class SpecificTasks {
     return SpecificTasks(day: day ?? this.day, tasks: tasks ?? this.tasks);
   }
 
-  factory SpecificTasks.fromMap(Map<String, dynamic> map) {
+factory SpecificTasks.fromMap(Map<String, dynamic> map) {
     return SpecificTasks(
       day: map['day'],
-      tasks: List.from(map['tasks']).map((e) => DayTask.fromMap(e)).toList(),
+      tasks: List.from(map['tasks'] ?? [])
+          .map((e) => DayTask.fromMap(Map<String, dynamic>.from(e as Map)))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {'day': day, 'tasks': tasks.map((e) => e.toMap()).toList()};
+    return {
+      'day': day,
+      'tasks': List.from(tasks).map((e) => e.toMap()).toList(),
+    };
   }
 }

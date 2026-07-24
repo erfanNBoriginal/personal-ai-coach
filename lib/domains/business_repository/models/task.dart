@@ -90,18 +90,22 @@ class DayTask {
     required this.supportingTasks,
   });
 
-  factory DayTask.fromMap(Map<String, dynamic> map) {
+factory DayTask.fromMap(Map<String, dynamic> map) {
     return DayTask(
       date: map['date'] ?? '',
       status: map['status'] ?? 'pending',
       scheduledTimeSlot: map['scheduledTimeSlot'] ?? '',
       scheduledTimeLabel: map['scheduledTimeLabel'] ?? '',
       primaryTask: PrimaryTask.fromMap(
-        map['primaryTask'] as Map<String, dynamic>? ?? {},
+        map['primaryTask'] != null
+            ? Map<String, dynamic>.from(map['primaryTask'] as Map)
+            : {},
       ),
-      supportingTasks: List.from(
-        map['supportingTasks'] ?? [],
-      ).map((e) => SupportingTask.fromMap(e)).toList(),
+      supportingTasks: List.from(map['supportingTasks'] ?? [])
+          .map(
+            (e) => SupportingTask.fromMap(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
     );
   }
   DayTask copyWith({
@@ -129,7 +133,9 @@ class DayTask {
       'scheduledTimeSlot': scheduledTimeSlot,
       'scheduledTimeLabel': scheduledTimeLabel,
       'primaryTask': primaryTask.toMap(),
-      'supportingTasks': supportingTasks.map((e) => e.toMap()).toList(),
+      'supportingTasks': List.from(
+        supportingTasks,
+      ).map((e) => e.toMap()).toList(),
     };
   }
 }
@@ -183,6 +189,8 @@ class PrimaryTask {
     required List<String> occupiedTimes,
     required String conflictingTime,
   }) {
+    print('conflictiiiiijkng');
+    print(conflictingTime);
     final currentTime = dayTimes.indexWhere((e) => e == conflictingTime);
     if (occupiedTimes.contains(conflictingTime)) {
       return findSlot(
@@ -203,13 +211,24 @@ class PrimaryTask {
       occupiedTimes: occupiedTimes,
       conflictingTime: scheduledStartTime!,
     );
+      final parts = newTimeLine.split(':');
+    final hour = int.parse(parts[0]);
+    final minute = int.parse(parts[1]);
+    final startTotalMinutes = hour * 60 + minute;
+    final endTotalMinutes = startTotalMinutes + estimatedMinutes;
+
+    final endHour = (endTotalMinutes ~/ 60) % 24;
+    final endMinute = endTotalMinutes % 60;
+    final newEndTime =
+        '${endHour.toString().padLeft(2, '0')}:${endMinute.toString().padLeft(2, '0')}';
+
     return PrimaryTask(
       id: id,
       title: title,
       description: description,
       estimatedMinutes: estimatedMinutes,
       scheduledStartTime: newTimeLine,
-      scheduledEndTime: (int.parse(newTimeLine) + estimatedMinutes).toString(),
+      scheduledEndTime: newEndTime,
       type: type,
       whyItMatters: whyItMatters,
       suggestedSearches: suggestedSearches,
@@ -252,7 +271,7 @@ class PrimaryTask {
       whyItMatters: map['whyItMatters'] ?? '',
       suggestedSearches: List.from(
         map['suggestedSearches'] ?? [],
-      ).map((e) => SuggestedSearch.fromMap(e)).toList(),
+      ).map((e) => SuggestedSearch.fromMap(Map<String, dynamic>.from(e as Map))).toList(),
     );
   }
 
@@ -326,7 +345,7 @@ class SupportingTask {
     );
   }
 
-  factory SupportingTask.fromMap(Map<String, dynamic> map) {
+factory SupportingTask.fromMap(Map<String, dynamic> map) {
     return SupportingTask(
       id: map['id'] ?? '',
       title: map['title'] ?? '',

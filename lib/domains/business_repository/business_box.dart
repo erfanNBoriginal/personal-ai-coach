@@ -19,14 +19,19 @@ abstract class BusinessBox {
       boxName: boxName,
       key: keys.weeklyTasks.index.toString(),
     );
-    final temp = List.from(res).map((e) => SpecificTasks.fromMap(e)).toList();
+    List<SpecificTasks> temp = [];
+    if (res != null) {
+      temp = List.from(res).map((e) {
+        final map = Map<String, dynamic>.from(e as Map);
+        return SpecificTasks.fromMap(map);
+      }).toList();
+    }
     return temp;
   }
 
   static Future<void> setWeeklyTasks(List<SpecificTasks> tasks) async {
     List<SpecificTasks> newTasks = List.from(tasks);
     final existingTasks = await getWeeklyTasks();
-
     // for (var i = 0; i < res.length; i++) {
     //   for (var b = 0; b < tasks.length; b++) {
     //     if(res[i].day == tasks[b].day){
@@ -40,68 +45,74 @@ abstract class BusinessBox {
     //     }
     //   }
     // }
-    final resByDay = {for (var r in existingTasks) r.day: r};
 
-    final List<SpecificTasks> rescheduledTasks = [];
+    List<SpecificTasks> rescheduledTasks = [];
+    if (existingTasks.isNotEmpty) {
+      final resByDay = {for (var r in existingTasks) r.day: r};
 
-    newTasks = newTasks.map((taskGroup) {
-      final matchedDay = resByDay[taskGroup.day];
-      if (matchedDay == null) return taskGroup;
-      final inComingDailySchedule = taskGroup.tasks
-          .map((e) => e.primaryTask.scheduledStartTime)
-          .toList();
-      final existingDailySchedule = matchedDay.tasks
-          .map((e) => e.primaryTask.scheduledStartTime)
-          .toList();
+      newTasks = newTasks.map((taskGroup) {
+        final matchedDay = resByDay[taskGroup.day];
+        if (matchedDay == null) return taskGroup;
+        final inComingDailySchedule = taskGroup.tasks
+            .map((e) => e.primaryTask.scheduledStartTime)
+            .toList();
+        final existingDailySchedule = matchedDay.tasks
+            .map((e) => e.primaryTask.scheduledStartTime)
+            .toList();
 
-      final finalTasks = taskGroup.tasks.map((element) {
-        if (existingDailySchedule.contains(inComingDailySchedule[0])) {
-          final temp = element.copyWith(
-            primaryTask: element.primaryTask.reschedule(
-              occupiedTimes: existingDailySchedule,
-            ),
-          );
-          matchedDay.addToList(task: temp);
-          rescheduledTasks.add(matchedDay);
-          return temp;
-        } else {
-          matchedDay.addToList(task: element);
-          rescheduledTasks.add(matchedDay);
-          return element;
-        }
+        final finalTasks = taskGroup.tasks.map((element) {
+          if (existingDailySchedule.contains(inComingDailySchedule[0])) {
+            final temp = element.copyWith(
+              primaryTask: element.primaryTask.reschedule(
+                occupiedTimes: existingDailySchedule,
+                scheduledStartTime: element.primaryTask.scheduledStartTime,
+              ),
+            );
+            matchedDay.addToList(task: temp);
+            rescheduledTasks.add(matchedDay);
+            return temp;
+          } else {
+            matchedDay.addToList(task: element);
+            rescheduledTasks.add(matchedDay);
+            return element;
+          }
+        }).toList();
+
+        return taskGroup.copyWith(tasks: finalTasks);
       }).toList();
 
-      return taskGroup.copyWith(tasks: finalTasks);
-    }).toList();
+      // existingTasks.map((e) {
+      //       e.tasks.map((b)=>  )
 
-    // existingTasks.map((e) {
-    //       e.tasks.map((b)=>  )
+      // });
 
-    // });
+      // for (var i = 0; i < existingTasks.length; i++) {
+      //   tasks.where((element){
 
-    // for (var i = 0; i < existingTasks.length; i++) {
-    //   tasks.where((element){
+      //     if((element.day == existingTasks[i].day)  ){
+      //       existingTasks[i].tasks.where((e){
+      //           element.tasks.where((b)=> b.primaryTask.scheduledStartTime == e.primaryTask.scheduledStartTime );
+      //       } );
+      //     };
+      //     return
+      //   })
+      // }
 
-    //     if((element.day == existingTasks[i].day)  ){
-    //       existingTasks[i].tasks.where((e){
-    //           element.tasks.where((b)=> b.primaryTask.scheduledStartTime == e.primaryTask.scheduledStartTime );
-    //       } );
-    //     };
-    //     return
-    //   })
-    // }
+      // existingTasks.map((e){
+      //   e.day == tasks.map((element){
 
-    // existingTasks.map((e){
-    //   e.day == tasks.map((element){
-
-    //   }  )
-    // });
-    // existingTasks.followedBy(newTasks);
-
+      //   }  )
+      // });
+      // existingTasks.followedBy(newTasks);
+    } else {
+      rescheduledTasks = [...newTasks];
+    }
+    print('boxxxxxxxxx');
+    print(rescheduledTasks.length);
     HiveDB.set(
       boxName: boxName,
       key: keys.weeklyTasks.index.toString(),
-      value: rescheduledTasks.map((e) => e.toMap()),
+      value: List.from(rescheduledTasks).map((e) => e.toMap()).toList(),
     );
   }
 }
