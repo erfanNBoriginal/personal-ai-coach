@@ -90,7 +90,7 @@ class DayTask {
     required this.supportingTasks,
   });
 
-factory DayTask.fromMap(Map<String, dynamic> map) {
+  factory DayTask.fromMap(Map<String, dynamic> map) {
     return DayTask(
       date: map['date'] ?? '',
       status: map['status'] ?? 'pending',
@@ -211,7 +211,7 @@ class PrimaryTask {
       occupiedTimes: occupiedTimes,
       conflictingTime: scheduledStartTime!,
     );
-      final parts = newTimeLine.split(':');
+    final parts = newTimeLine.split(':');
     final hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
     final startTotalMinutes = hour * 60 + minute;
@@ -269,9 +269,11 @@ class PrimaryTask {
       scheduledEndTime: map['scheduledEndTime'] ?? '',
       type: map['type'] ?? '',
       whyItMatters: map['whyItMatters'] ?? '',
-      suggestedSearches: List.from(
-        map['suggestedSearches'] ?? [],
-      ).map((e) => SuggestedSearch.fromMap(Map<String, dynamic>.from(e as Map))).toList(),
+      suggestedSearches: List.from(map['suggestedSearches'] ?? [])
+          .map(
+            (e) => SuggestedSearch.fromMap(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
     );
   }
 
@@ -295,17 +297,21 @@ class PrimaryTask {
     return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
   }
 }
-// extension primary on PrimaryTask{
-//   PrimaryTask changeRandom(PrimaryTask task){
-//     return task.copyWith(scheduledStartTime: )
-//   }
 
-// String createRandomTime(String currentSchedule){
-// List<String> timeLines = List.generate(18, (int index)=> '${index+6}' );
-// timeLines.
-// }
+extension Primary on List<DayTask> {
+  void sortByHour() {
+    sort(
+      (a, b) => _toMinutes(
+        a.primaryTask.scheduledStartTime,
+      ).compareTo(_toMinutes(b.primaryTask.scheduledStartTime)),
+    );
+  }
 
-// }
+  static int _toMinutes(String time) {
+    final p = time.split(':');
+    return int.parse(p[0]) * 60 + int.parse(p[1]);
+  }
+}
 
 class SupportingTask {
   final String id;
@@ -345,7 +351,7 @@ class SupportingTask {
     );
   }
 
-factory SupportingTask.fromMap(Map<String, dynamic> map) {
+  factory SupportingTask.fromMap(Map<String, dynamic> map) {
     return SupportingTask(
       id: map['id'] ?? '',
       title: map['title'] ?? '',

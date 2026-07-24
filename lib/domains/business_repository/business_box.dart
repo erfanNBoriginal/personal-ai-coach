@@ -1,5 +1,6 @@
 import 'package:personal_ai_coach/data_providers/hive/hive_db.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
 
 enum keys { weeklyTasks }
 
@@ -25,6 +26,9 @@ abstract class BusinessBox {
         final map = Map<String, dynamic>.from(e as Map);
         return SpecificTasks.fromMap(map);
       }).toList();
+    }
+    for (var element in temp) {
+      element.tasks.sortByHour();
     }
     return temp;
   }

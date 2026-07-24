@@ -133,6 +133,11 @@ class BusinessRepository {
     await BusinessBox.setWeeklyTasks(tasks);
   }
 
+  Future<List<SpecificTasks>> readSchedule() async {
+    final res = await BusinessBox.getWeeklyTasks();
+    return res;
+  }
+
   Future<List<Message>> readChatMessages() async {
     final res = [Message.ai(content: 'content')];
     Future.delayed(Duration(seconds: 2));

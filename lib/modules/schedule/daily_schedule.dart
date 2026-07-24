@@ -44,7 +44,7 @@ class TaskCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 10,
-              child: Center(child: U.Text(text: 'text')),
+              child: Center(child: U.Text(text: task.primaryTask.scheduledStartTime)),
             ),
             // const Spacer(flex: 10),
             Expanded(

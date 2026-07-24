@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 import 'package:personal_ai_coach/modules/schedule/cubit/schedule_cubit.dart';
 import 'package:personal_ai_coach/modules/schedule/daily_schedule.dart';
@@ -9,8 +10,8 @@ import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 
 class SchedulePage extends StatefulWidget {
   static String route = '/schedule';
-  final List<SpecificTasks> initialTasks;
-  const SchedulePage({super.key, required this.initialTasks});
+  final List<SpecificTasks>? initialTasks;
+  const SchedulePage({super.key,  this.initialTasks});
 
   @override
   State<SchedulePage> createState() => _SchedulePageState();
@@ -23,10 +24,9 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    print('widget.initialTasks.length');
-    print(widget.initialTasks.length);
     _pageKeys = List.generate(
-      widget.initialTasks[0].tasks.length,
+      7,
+      // widget.initialTasks[0].tasks.length,
       (_) => GlobalKey(),
     );
     // Measure after first frame
@@ -56,12 +56,13 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ScheduleCubit(initialTasks: widget.initialTasks),
+      create: (context) => ScheduleCubit(
+        initialTasks: widget.initialTasks,
+        repo: context.read<BusinessRepository>(),
+      ),
       child: BlocBuilder<ScheduleCubit, ScheduleState>(
         builder: (context, state) {
           final cubit = context.read<ScheduleCubit>();
-          print('_maxPageHeightsssssssssssss');
-          print(_maxPageHeight);
           return Scaffold(
             body: SafeArea(
               child: ListView(

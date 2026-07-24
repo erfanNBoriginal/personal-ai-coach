@@ -10,9 +10,8 @@ class ScheduleState {
     required this.selectedDayIndex,
   });
 
-  ScheduleState.init()
+  ScheduleState.init(this.dailyTasks)
     : loading = false,
-      dailyTasks = [],
       selectedDayIndex = '';
 
   ScheduleState copyWith({

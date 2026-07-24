@@ -9,7 +9,7 @@ import 'package:personal_ai_coach/modules/task/task_page.dart';
 final rootNavKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
-  initialLocation: ChatPge.route,
+  initialLocation: SchedulePage.route,
   navigatorKey: rootNavKey,
 
   routes: [
