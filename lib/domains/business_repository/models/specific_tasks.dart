@@ -5,6 +5,10 @@ class SpecificTasks {
   final List<DayTask> tasks;
   SpecificTasks({required this.day, required this.tasks});
 
+  SpecificTasks copyWith({String? day, List<DayTask>? tasks}) {
+    return SpecificTasks(day: day ?? this.day, tasks: tasks ?? this.tasks);
+  }
+
   factory SpecificTasks.fromMap(Map<String, dynamic> map) {
     return SpecificTasks(
       day: map['day'],

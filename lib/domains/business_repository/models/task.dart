@@ -104,6 +104,23 @@ class DayTask {
       ).map((e) => SupportingTask.fromMap(e)).toList(),
     );
   }
+  DayTask copyWith({
+    String? date,
+    String? status,
+    String? scheduledTimeSlot,
+    String? scheduledTimeLabel,
+    PrimaryTask? primaryTask,
+    List<SupportingTask>? supportingTasks,
+  }) {
+    return DayTask(
+      date: date ?? this.date,
+      status: status ?? this.status,
+      scheduledTimeSlot: scheduledTimeSlot ?? this.scheduledTimeSlot,
+      scheduledTimeLabel: scheduledTimeLabel ?? this.scheduledTimeLabel,
+      primaryTask: primaryTask ?? this.primaryTask,
+      supportingTasks: supportingTasks ?? this.supportingTasks,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -139,6 +156,89 @@ class PrimaryTask {
     required this.whyItMatters,
     required this.suggestedSearches,
   });
+
+  List<String> dayTimes = [
+    '6:00',
+    '7:00',
+    '8:00',
+    '9:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+    '24:00',
+  ];
+  String findSlot({
+    required List<String> occupiedTimes,
+    required String conflictingTime,
+  }) {
+    final currentTime = dayTimes.indexWhere((e) => e == conflictingTime);
+    if (occupiedTimes.contains(conflictingTime)) {
+      return findSlot(
+        occupiedTimes: occupiedTimes,
+        conflictingTime: dayTimes[currentTime + 1],
+      );
+    } else {
+      return conflictingTime;
+    }
+  }
+
+  PrimaryTask reschedule({
+    required List<String> occupiedTimes,
+    String? scheduledStartTime,
+    String? scheduledEndTime,
+  }) {
+    final newTimeLine = findSlot(
+      occupiedTimes: occupiedTimes,
+      conflictingTime: scheduledStartTime!,
+    );
+    return PrimaryTask(
+      id: id,
+      title: title,
+      description: description,
+      estimatedMinutes: estimatedMinutes,
+      scheduledStartTime: newTimeLine,
+      scheduledEndTime: (int.parse(newTimeLine) + estimatedMinutes).toString(),
+      type: type,
+      whyItMatters: whyItMatters,
+      suggestedSearches: suggestedSearches,
+    );
+  }
+
+  PrimaryTask copyWith({
+    String? id,
+    String? title,
+    String? description,
+    int? estimatedMinutes,
+    String? scheduledStartTime,
+    String? scheduledEndTime,
+    String? type,
+    String? whyItMatters,
+    List<SuggestedSearch>? suggestedSearches,
+  }) {
+    return PrimaryTask(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      estimatedMinutes: estimatedMinutes ?? this.estimatedMinutes,
+      scheduledStartTime: scheduledStartTime ?? this.scheduledStartTime,
+      scheduledEndTime: scheduledEndTime ?? this.scheduledEndTime,
+      type: type ?? this.type,
+      whyItMatters: whyItMatters ?? this.whyItMatters,
+      suggestedSearches: suggestedSearches ?? this.suggestedSearches,
+    );
+  }
 
   factory PrimaryTask.fromMap(Map<String, dynamic> map) {
     return PrimaryTask(
@@ -176,6 +276,17 @@ class PrimaryTask {
     return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
   }
 }
+// extension primary on PrimaryTask{
+//   PrimaryTask changeRandom(PrimaryTask task){
+//     return task.copyWith(scheduledStartTime: )
+//   }
+
+// String createRandomTime(String currentSchedule){
+// List<String> timeLines = List.generate(18, (int index)=> '${index+6}' );
+// timeLines.
+// }
+
+// }
 
 class SupportingTask {
   final String id;
@@ -195,6 +306,25 @@ class SupportingTask {
     required this.type,
     required this.optional,
   });
+  SupportingTask copyWith({
+    String? id,
+    String? title,
+    int? estimatedMinutes,
+    String? scheduledStartTime,
+    String? scheduledEndTime,
+    String? type,
+    bool? optional,
+  }) {
+    return SupportingTask(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      estimatedMinutes: estimatedMinutes ?? this.estimatedMinutes,
+      scheduledStartTime: scheduledStartTime ?? this.scheduledStartTime,
+      scheduledEndTime: scheduledEndTime ?? this.scheduledEndTime,
+      type: type ?? this.type,
+      optional: optional ?? this.optional,
+    );
+  }
 
   factory SupportingTask.fromMap(Map<String, dynamic> map) {
     return SupportingTask(

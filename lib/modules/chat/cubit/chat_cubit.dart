@@ -6,9 +6,10 @@ import 'package:personal_ai_coach/domains/business_repository/business_repositor
 import 'package:personal_ai_coach/domains/business_repository/models/followup_question.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/task.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:personal_ai_coach/tool_kit/tool_kit.dart' as T;
 part 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
@@ -83,6 +84,19 @@ class ChatCubit extends Cubit<ChatState> {
       tasksRes['message']['content'],
     );
     WeeklyTasks weeklyTasks = WeeklyTasks.fromMap(weekJson);
+
+    final specificTasks = weeklyTasks.days.asMap().entries.map(
+      ((e) => SpecificTasks(
+        day: T.DateFormater.formater(
+          e.key == 1
+              ? DateTime.now()
+              : DateTime.now().add(Duration(days: e.key - 1)),
+        ),
+        tasks: [e.value],
+      )),
+    );
+
+      // _repo.
 
     emit(state.copyWith(loading: false));
     return (roadmap: roadmap, tasks: weeklyTasks);

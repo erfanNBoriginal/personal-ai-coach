@@ -275,29 +275,39 @@ class RoadmapPage extends StatelessWidget {
                                                                               )
                                                                               .toList();
 
+                                                                          // print(
+                                                                          //   'dayasssssssssssssss',
+                                                                          // );
+                                                                          // print(
+                                                                          //   list,
+                                                                          // );
+                                                                          // final List<
+                                                                          //   SpecificTasks
+                                                                          // >
+                                                                          // specificList =
+                                                                          //     List.from(
+                                                                          //           list,
+                                                                          //         )
+                                                                          //         .map(
+                                                                          //           (
+                                                                          //             e,
+                                                                          //           ) => SpecificTasks.fromMap(
+                                                                          //             e
+                                                                          //           ),
+                                                                          //         )
+                                                                          //         .toList();
+                                                                          // print(
+                                                                          //   specificList.length,
+                                                                          // );
+                                                                          
                                                                           print(
                                                                             'dayasssssssssssssss',
                                                                           );
                                                                           print(
-                                                                            list,
+                                                                            e.primaryTask.scheduledStartTime,
                                                                           );
-                                                                          final List<
-                                                                            SpecificTasks
-                                                                          >
-                                                                          specificList =
-                                                                              List.from(
-                                                                                    list,
-                                                                                  )
-                                                                                  .map(
-                                                                                    (
-                                                                                      e,
-                                                                                    ) => SpecificTasks.fromMap(
-                                                                                      e
-                                                                                    ),
-                                                                                  )
-                                                                                  .toList();
                                                                           print(
-                                                                            specificList.length,
+                                                                            e.primaryTask.scheduledEndTime,
                                                                           );
                                                                           // GoRouter.of(
                                                                           //   context,
