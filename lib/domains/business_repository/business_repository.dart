@@ -1,6 +1,7 @@
 import 'package:personal_ai_coach/data_providers/business_ws/business_ws.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_box.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/message.dart';
+import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 
 class BusinessRepository {
   static Future<BusinessRepository> init() async {
@@ -126,6 +127,10 @@ class BusinessRepository {
       },
     );
     return res.data;
+  }
+
+  Future<void> createSchedule(List<SpecificTasks> tasks) async {
+    await BusinessBox.setWeeklyTasks(tasks);
   }
 
   Future<List<Message>> readChatMessages() async {

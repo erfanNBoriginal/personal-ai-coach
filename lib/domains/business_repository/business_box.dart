@@ -42,6 +42,8 @@ abstract class BusinessBox {
     // }
     final resByDay = {for (var r in existingTasks) r.day: r};
 
+    final List<SpecificTasks> rescheduledTasks = [];
+
     newTasks = newTasks.map((taskGroup) {
       final matchedDay = resByDay[taskGroup.day];
       if (matchedDay == null) return taskGroup;
@@ -52,20 +54,30 @@ abstract class BusinessBox {
           .map((e) => e.primaryTask.scheduledStartTime)
           .toList();
 
-      final finalTasks = taskGroup.tasks
-          .map(
-            (element) =>
-                existingDailySchedule.contains(inComingDailySchedule[0])
-                ? element.copyWith(
-                    primaryTask: element.primaryTask.reschedule(
-                      occupiedTimes: existingDailySchedule,
-                    ),
-                  )
-                : element,
-          )
-          .toList();
+      final finalTasks = taskGroup.tasks.map((element) {
+        if (existingDailySchedule.contains(inComingDailySchedule[0])) {
+          final temp = element.copyWith(
+            primaryTask: element.primaryTask.reschedule(
+              occupiedTimes: existingDailySchedule,
+            ),
+          );
+          matchedDay.addToList(task: temp);
+          rescheduledTasks.add(matchedDay);
+          return temp;
+        } else {
+          matchedDay.addToList(task: element);
+          rescheduledTasks.add(matchedDay);
+          return element;
+        }
+      }).toList();
+
       return taskGroup.copyWith(tasks: finalTasks);
     }).toList();
+
+    // existingTasks.map((e) {
+    //       e.tasks.map((b)=>  )
+
+    // });
 
     // for (var i = 0; i < existingTasks.length; i++) {
     //   tasks.where((element){
@@ -84,10 +96,12 @@ abstract class BusinessBox {
 
     //   }  )
     // });
+    // existingTasks.followedBy(newTasks);
+
     HiveDB.set(
       boxName: boxName,
       key: keys.weeklyTasks.index.toString(),
-      value: newTasks.map((e) => e.toMap()),
+      value: rescheduledTasks.map((e) => e.toMap()),
     );
   }
 }

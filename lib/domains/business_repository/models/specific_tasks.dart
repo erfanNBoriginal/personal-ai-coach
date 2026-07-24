@@ -5,6 +5,12 @@ class SpecificTasks {
   final List<DayTask> tasks;
   SpecificTasks({required this.day, required this.tasks});
 
+  SpecificTasks addToList({required DayTask task}) {
+    tasks.add(task);
+    List<DayTask> newtasks = [...tasks];
+    return SpecificTasks(day: day, tasks: newtasks);
+  }
+
   SpecificTasks copyWith({String? day, List<DayTask>? tasks}) {
     return SpecificTasks(day: day ?? this.day, tasks: tasks ?? this.tasks);
   }
