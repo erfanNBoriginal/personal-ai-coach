@@ -132,7 +132,13 @@ class TaskDeletionCard extends StatelessWidget {
                         Expanded(
                           child: U.Button(
                             title: 'accept',
-                            onTap: isdisabled ? null : () {},
+                            onTap: isdisabled
+                                ? null
+                                : () async {
+                                    await context
+                                        .read<AiTaskManagerCubit>()
+                                        .onDeleteAccepted();
+                                  },
                             buttonColor: U.ButtonColor.secondary,
                           ),
                         ),

@@ -2,6 +2,7 @@ import 'package:personal_ai_coach/data_providers/hive/hive_db.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/goal.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
+import 'package:personal_ai_coach/tool_kit/date_formater.dart';
 import 'package:personal_ai_coach/ui_kit/duration_picker_dlg.dart';
 
 import 'models/task.dart';
@@ -248,6 +249,39 @@ abstract class BusinessBox {
       key: Keys.weeklyTasks.index.toString(),
       value: updated.map((e) => e.toMap()).toList(),
     );
+  }
+
+  static Future<void> deleteTasks(List<DayTask> tasksToDelete) async {
+    final weeklyTasks = await getWeeklyTasks();
+    // Group descriptions to delete by their day for quick lookup
+    final Map<DateTime, Set<String>> descriptionsByDay = {};
+    for (final task in tasksToDelete) {
+      descriptionsByDay
+          .putIfAbsent(DateFormater.dateFromString(task.date), () => <String>{})
+          .add(task.primaryTask.description);
+    }
+
+    final updated = weeklyTasks.map((day) {
+      final descriptionsToRemove =
+          descriptionsByDay[DateFormater.dateFromString(day.day)];
+
+      if (descriptionsToRemove == null || descriptionsToRemove.isEmpty) {
+        return day;
+      }
+      final filtered = day.tasks
+          .where(
+            (t) => !descriptionsToRemove.contains(t.primaryTask.description),
+          )
+          .toList();
+      return day.copyWith(tasks: filtered);
+    }).toList();
+
+    await HiveDB.set(
+      boxName: boxName,
+      key: Keys.weeklyTasks.index.toString(),
+      value: updated.map((e) => e.toMap()).toList(),
+    );
+
   }
 
   static Future<Roadmap> readRoadmapTasks(Roadmap roadmap) async {

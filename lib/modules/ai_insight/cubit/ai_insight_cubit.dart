@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:personal_ai_coach/domains/business_repository/business_repository.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/goal.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
 import 'package:personal_ai_coach/tool_kit/tool_kit.dart' as T;
 import 'package:personal_ai_coach/domains/business_repository/models/specific_tasks.dart';
 

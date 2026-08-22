@@ -66,11 +66,6 @@ class TaskMangerPage extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Align(
-                      alignment: AlignmentGeometry.topCenter,
-                      child: U.Text(text: 'manage any of your tasks!'),
-                    ),
-                    SizedBox(height: 15),
                     if (state.messages.isNotEmpty)
                       Expanded(
                         child: Padding(
@@ -80,11 +75,11 @@ class TaskMangerPage extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
+                                  if (index == 0) SizedBox(height: 70),
                                   ChatBubble(
                                     rtl: state.messages[index].role == 'user',
                                     text: state.messages[index].content,
                                   ),
-
                                   if (state.actions.keys
                                           .where((e) => e == index)
                                           .toList()
@@ -119,6 +114,7 @@ class TaskMangerPage extends StatelessWidget {
                     // SizedBox(height: 115),
                   ],
                 ),
+                U.AppBar(title: 'Enhance with AI!', blur: true),
                 Positioned(
                   bottom: 120,
                   right: 0,

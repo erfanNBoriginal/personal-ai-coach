@@ -145,8 +145,7 @@ class BusinessRepository {
     print(messagesList.map((e) => e.toMap()).toList());
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.cerebrasAi,
-      accessToken:
-          ApiKeys.mistralKey,
+      accessToken: ApiKeys.mistralKey,
       data: {
         // "model": "llama-3.3-70b-versatile",
         "model": "deepseek-v4-flash-free",
@@ -163,8 +162,7 @@ class BusinessRepository {
     messageListt.add(message);
     final res = await BusinessWs.client.post(
       url: BusinessWs.urls.cerebrasAi,
-      accessToken:
-          ApiKeys.mistralKey,
+      accessToken: ApiKeys.mistralKey,
       data: {
         "model": "deepseek-v4-flash-free",
         "messages": messageListt.map((e) => e.toMap()).toList(),
@@ -178,8 +176,7 @@ class BusinessRepository {
     messageList.insert(0, weeklyTasksGenerationPrompt);
     messageList.add(message);
     final res = await BusinessWs.client.post(
-      accessToken:
-          ApiKeys.mistralKey,
+      accessToken: ApiKeys.mistralKey,
       url: BusinessWs.urls.cerebrasAi,
       data: {
         "model": "deepseek-v4-flash-free",
@@ -222,6 +219,10 @@ class BusinessRepository {
 
   Future<void> deleteTask(DayTask task) async {
     await BusinessBox.deleteTask(task);
+  }
+
+  Future<void> deleteTasks(List<DayTask> tasks) async {
+    await BusinessBox.deleteTasks(tasks);
   }
 
   Future<void> updateDays(List<SpecificTasks> tasks) async {

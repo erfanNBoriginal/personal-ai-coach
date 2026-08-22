@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:personal_ai_coach/domains/business_repository/models/goal.dart';
-import 'package:personal_ai_coach/domains/business_repository/models/roadmap.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:personal_ai_coach/ui_kit/ui_kit.dart' as U;
 

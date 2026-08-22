@@ -99,12 +99,6 @@ class AiTaskManagerCubit extends Cubit<AiTaskManagerState> {
     print('temppppppppppppppppppp');
     print(temp.toMap());
     emit(state.copyWith(loading: false, messages: list, actions: actions));
-    print('state.messages.length');
-    print(
-      state.messages.map((e) {
-        print(e.content);
-      }),
-    );
   }
 
   void onClarifytaped() {
@@ -155,8 +149,7 @@ class AiTaskManagerCubit extends Cubit<AiTaskManagerState> {
         actions.entries.last.key,
       );
     }
-    print('-----------------------------------------------  ');
-    print(actions);
+
     emit(
       state.copyWith(
         loading: false,
@@ -167,14 +160,14 @@ class AiTaskManagerCubit extends Cubit<AiTaskManagerState> {
     );
   }
 
+  Future<void> onDeleteAccepted() async {
+    await _repo.deleteTasks(state.modifiedTasks.entries.last.value);
+  }
+
   Map<int, List<DayTask>> mapedTasks = {};
   Future<void> findTasks(List<String> ids, int key) async {
     emit(state.copyWith(loading: true));
     final res = await _repo.readSchedule();
-    // List<DayTask?> temp ;
-    // for (var element in res) {
-    // if(element.tasks.contains(element))
-    // }
     List<DayTask> temp = res
         .expand(
           (e) => e.tasks.where((element) {
